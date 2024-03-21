@@ -1,8 +1,9 @@
-package edu.northeastern.a6;
+package edu.northeastern.teamprojectgroup16;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
 
 public class MainActivity extends AppCompatActivity {
 

@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "a6"
+rootProject.name = "Team Project Group 16"
 include(":app")
