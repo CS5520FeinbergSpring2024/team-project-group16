@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18695970342",
+    "project_id": "memecho-f346f",
+    "storage_bucket": "memecho-f346f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18695970342:android:32afe9b2a033d1141c90e7",
+        "android_client_info": {
+          "package_name": "edu.northeastern.teamprojectgroup16"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGRJON7jreEuCigg3H1PPXfIPhp9utI4E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
