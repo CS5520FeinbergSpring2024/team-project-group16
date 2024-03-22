@@ -51,8 +51,8 @@ public class Login extends AppCompatActivity {
         buttonLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = String.valueOf(editTextEmail);
-                String password = String.valueOf(editTextPassword);
+                String email = String.valueOf(editTextEmail.getText());
+                String password = String.valueOf(editTextPassword.getText());
                 if(TextUtils.isEmpty(email)) {
                     Toast.makeText(Login.this, "Email cannot be empty!", Toast.LENGTH_SHORT).show();
                     return;
