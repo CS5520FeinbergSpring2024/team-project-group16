@@ -58,4 +58,8 @@
     <string name="message_fragment">Message Fragment</string>
     <string name="profile_fragment">Profile Fragment</string>
     <string name="search_fragment">Search Fragment</string>
+    <string name="username">Username</string>
+    <string name="_2h">2h</string>
+    <string name="post">Post</string>
+    <string name="_100_likes">100 Likes</string>
 </resources>
