@@ -4,66 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
     tools:context=".SearchFragment">
 
-    <!-- Search bar -->
     <EditText
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Search"
-        android:inputType="text"
-        android:padding="16dp"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@id/imageViewSearch"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"/>
-
-    <ImageView
-        android:id="@+id/imageViewSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:hint="Search"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Category labels -->
-    <TextView
-        android:id="@+id/textViewPosts"
+    <Button
+        android:id="@+id/buttonSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Related Posts"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextSearch"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"/>
-
-    <TextView
-        android:id="@+id/textViewAccounts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Related Accounts"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewPosts"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
-
-    <!-- Left direction arrow -->
-    <ImageView
-        android:id="@+id/imageViewBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        android:text="Search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
