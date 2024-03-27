@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".SearchFragment">
+
+    <!-- Left arrow -->
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Search bar -->
+    <TextView
+        android:id="@+id/tvSearchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Search results: "
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBack" />
+
+    <!-- Searched query -->
+    <TextView
+        android:id="@+id/tvSearchedQuery"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Searched text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/ivBack" />
+
+    <!-- Guideline to align Posts and Accounts -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <!-- Posts category -->
+    <TextView
+        android:id="@+id/tvPosts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Posts"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSearchBar" />
+
+    <!-- Accounts category -->
+    <TextView
+        android:id="@+id/tvAccounts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Accounts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/tvSearchBar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
