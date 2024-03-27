@@ -11,11 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import edu.northeastern.teamprojectgroup16.R;
-
 public class SearchFragment extends Fragment {
-
-    // Other variables and methods
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

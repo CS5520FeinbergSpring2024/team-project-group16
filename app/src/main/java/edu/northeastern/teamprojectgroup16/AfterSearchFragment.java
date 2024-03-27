@@ -4,38 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-public class SearchFragment extends Fragment {
+public class AfterSearchFragment extends Fragment {
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-
-        EditText editTextSearch = view.findViewById(R.id.editTextSearch);
-        Button buttonSearch = view.findViewById(R.id.buttonSearch);
-
-        buttonSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the keyword entered by the user
-                String keyword = editTextSearch.getText().toString().trim();
-
-                // Replace the current fragment with fragment_after_search.xml
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frameLayout, new AfterSearchFragment());
-                fragmentTransaction.addToBackStack(null); // Add to back stack for back navigation
-                fragmentTransaction.commit();
-            }
-        });
-
-        return view;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_after_search, container, false);
     }
 }
