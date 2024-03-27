@@ -64,11 +64,14 @@
 //}
 package edu.northeastern.teamprojectgroup16;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -80,6 +83,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView textViewUsername;
     private TextView textViewEmail;
+    Button btnLogOut;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -103,6 +107,21 @@ public class ProfileFragment extends Fragment {
             textViewUsername.setText("Username: " + username);
             textViewEmail.setText("Email: " + email);
         }
+
+        btnLogOut = rootView.findViewById(R.id.btn_logout);
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                // Navigate back to the login screen or perform any other desired action
+                // For example, you can navigate back to the login screen if you have one
+                Intent intent = new Intent(getActivity(), Login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().finish();
+                // You may also display a toast or a Snackbar to inform the user that they have been logged out
+                Toast.makeText(getActivity(), "Logged out successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return rootView;
     }
