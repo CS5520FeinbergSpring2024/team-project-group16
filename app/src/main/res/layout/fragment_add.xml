@@ -1,16 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddFragment">
+    android:fillViewport="true">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_fragment"
-        android:textSize="26sp"
-        android:layout_gravity="center"/>
+        android:orientation="vertical"
+        android:padding="10dp">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_fragment"
+            android:textSize="26sp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/imageViewPost"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_launcher_background"
+            android:contentDescription="Preview" />
+
+        <EditText
+            android:id="@+id/editTextCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title"
+            android:layout_marginTop="10dp"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/buttonPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/post" />
+
+    </LinearLayout>
+
+</ScrollView>
