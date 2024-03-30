@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,8 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.checkerframework.common.subtyping.qual.Bottom;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +42,13 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private PostRecFragment postRecFragment;
+    private ImageRecFragment imageRecFragment;
+    private FloatingActionButton addCircleFab;
+    private NestedScrollView nestedScrollView;
+    
+    private Button showPost;
+    private Button showImage;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -77,7 +92,10 @@ public class HomeFragment extends Fragment {
         LinearLayout circleContainer = rootView.findViewById(R.id.circleContainer);
         updateServerBar(circleContainer);
 
-        NestedScrollView nestedScrollView = rootView.findViewById(R.id.homeScrollView);
+        postRecFragment = new PostRecFragment();
+        imageRecFragment = new ImageRecFragment();
+
+        nestedScrollView = rootView.findViewById(R.id.homeScrollView);
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -91,7 +109,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        FloatingActionButton addCircleFab = rootView.findViewById(R.id.addCircleFab);
+        addCircleFab = rootView.findViewById(R.id.addCircleFab);
         addCircleFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,8 +117,35 @@ public class HomeFragment extends Fragment {
                 addCircle(circleContainer, circleImages.length);
             }
         });
-
+        
+        showPost = rootView.findViewById(R.id.showPostBtn);
+        showImage = rootView.findViewById(R.id.showImageBtn);
+        showImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImageRecyclerView();
+            }
+        });
+        showPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPostRecyclerView();
+            }
+        });
+    
         return rootView;
+    }
+
+    private void showImageRecyclerView() {
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.recyclerViewContainer, imageRecFragment)
+                .commit();
+    }
+
+    private void showPostRecyclerView() {
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.recyclerViewContainer, postRecFragment)
+                .commit();
     }
 
     private void hideHorizontalScrollBar() {

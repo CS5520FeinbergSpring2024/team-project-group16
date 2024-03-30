@@ -66,4 +66,5 @@
     <string name="add_server" />
     <string name="show_post_btn">Post</string>
     <string name="show_image_bnt">Image</string>
+    <string name="post_title">Post Title</string>
 </resources>
