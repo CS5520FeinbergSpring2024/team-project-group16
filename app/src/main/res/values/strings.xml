@@ -62,4 +62,8 @@
     <string name="_2h">2h</string>
     <string name="post">Post</string>
     <string name="_100_likes">100 Likes</string>
+    <string name="add_circle" />
+    <string name="add_server" />
+    <string name="show_post_btn">Post</string>
+    <string name="show_image_bnt">Image</string>
 </resources>
