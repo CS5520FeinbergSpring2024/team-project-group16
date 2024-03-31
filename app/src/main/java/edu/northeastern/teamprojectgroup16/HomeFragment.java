@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Add a new circle
-                addCircle(circleContainer, circleImages.length);
+                addCircle(circleContainer, circleImages.length - 1);
             }
         });
         
