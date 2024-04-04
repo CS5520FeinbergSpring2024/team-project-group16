@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         newServer.setServerID(serverId);
 
         // Add the new server to the Firebase database
+// Add the new server to the Firebase database
         if (serverId != null) {
             dbRef.child("servers").child(serverId).setValue(newServer)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -100,6 +102,26 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             // server added successfully
                             Log.i("ServerAdd", "Server added successfully");
+
+                            // Get a reference to the Firebase database for `users`
+                            DatabaseReference dbUsersRef = FirebaseDatabase.getInstance().getReference("users");
+
+                            // Update user document with added server Id
+                            dbUsersRef.child(user.getUid()).child("serverIds").child(serverId).setValue(true)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.i("ServerAdd", "Server Id added to user document successfully");
+                                            Toast.makeText(MainActivity.this, "Server added successfully!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e("ServerAdd", "Error adding server Id to user document", e);
+                                            Toast.makeText(MainActivity.this, "Error adding server Id to user document", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
