@@ -1,25 +1,42 @@
 package edu.northeastern.teamprojectgroup16;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
 
 import edu.northeastern.teamprojectgroup16.databinding.ActivityCheckIndividualPostBinding;
 import edu.northeastern.teamprojectgroup16.databinding.ActivityMainBinding;
+import edu.northeastern.teamprojectgroup16.model.ServerModel;
 
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button btnCreateServer;
     ActivityMainBinding binding;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +49,67 @@ public class MainActivity extends AppCompatActivity {
         btnCreateServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("Create Server", "Clicked");
+                Context context = MainActivity.this;
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Enter the Name of Server");
 
+                final EditText codeInput = new EditText(context);
+                codeInput.setHint("Enter the Name");
+
+                builder.setView(codeInput);
+
+                builder.setPositiveButton("OK", (dialog, which) -> addServer(codeInput.getText().toString()));
+
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+                builder.show();
             }
         });
         setListeners();
+    }
+
+    private void addServer(String serverName){
+
+        // Create a ServerModel object
+        ServerModel newServer = new ServerModel();
+        newServer.setServerName(serverName);
+
+        // Get the current user
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            // Add current user as a member of the server
+            newServer.addMember(user.getUid());
+        }
+
+        // Get a reference to the Firebase database
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+
+        // Generate a new serverID
+        String serverId = dbRef.child("servers").push().getKey();
+
+        // Set the serverID for the new server
+        newServer.setServerID(serverId);
+
+        // Add the new server to the Firebase database
+        if (serverId != null) {
+            dbRef.child("servers").child(serverId).setValue(newServer)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // server added successfully
+                            Log.i("ServerAdd", "Server added successfully");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle any errors that occur during the process
+                            Log.e("ServerAdd", "Error adding server", e);
+                        }
+                    });
+        }
     }
     private void setListeners() {
         replaceFragment(new HomeFragment());
