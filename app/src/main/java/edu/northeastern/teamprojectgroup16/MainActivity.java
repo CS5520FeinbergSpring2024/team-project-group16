@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -19,7 +18,7 @@ import edu.northeastern.teamprojectgroup16.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
-    Button btnLogOut;
+    Button btnCreateServer;
     ActivityMainBinding binding;
 
     @Override
@@ -28,15 +27,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        btnLogOut = findViewById(R.id.buttonLogOut);
+        btnCreateServer = findViewById(R.id.buttonCreateServer);
         mAuth = FirebaseAuth.getInstance();
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
+        btnCreateServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(MainActivity.this, Login.class);
-                startActivity(intent);
-                finish();
+
             }
         });
         setListeners();
