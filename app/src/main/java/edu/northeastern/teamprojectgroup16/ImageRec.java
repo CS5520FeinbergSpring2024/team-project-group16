@@ -1,13 +1,13 @@
 package edu.northeastern.teamprojectgroup16;
 
 public class ImageRec {
-    private int imageResId;
+    private String imageUrl;
 
-    public ImageRec(int imageResId) {
-        this.imageResId = imageResId;
+    public ImageRec(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public int getImageResId() {
-        return imageResId;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

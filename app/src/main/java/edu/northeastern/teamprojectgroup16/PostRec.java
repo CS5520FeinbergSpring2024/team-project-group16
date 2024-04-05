@@ -1,16 +1,16 @@
 package edu.northeastern.teamprojectgroup16;
 
 public class PostRec {
-    private int imageResId;
+    private String imageUrl;
     private String title;
 
-    public PostRec(int imageResId, String title) {
-        this.imageResId = imageResId;
+    public PostRec(String imageUrl, String title) {
+        this.imageUrl = imageUrl;
         this.title = title;
     }
 
-    public int getImageResId() {
-        return imageResId;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getTitle() {

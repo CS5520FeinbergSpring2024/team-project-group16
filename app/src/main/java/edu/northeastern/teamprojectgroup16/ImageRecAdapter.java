@@ -1,5 +1,7 @@
 package edu.northeastern.teamprojectgroup16;
 
+import android.content.Context;
+import android.icu.number.CompactNotation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,11 +9,14 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class ImageRecAdapter extends RecyclerView.Adapter<ImageRecAdapter.ImageViewHolder> {
 
     private List<ImageRec> imageList;
+    private Context context;
 
     public ImageRecAdapter(List<ImageRec> imageList) {
         this.imageList = imageList;
@@ -27,7 +32,7 @@ public class ImageRecAdapter extends RecyclerView.Adapter<ImageRecAdapter.ImageV
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         ImageRec image = imageList.get(position);
-        holder.imageView.setImageResource(image.getImageResId());
+        Glide.with(context).load(image.getImageUrl()).into(holder.imageView);
     }
 
     @Override
