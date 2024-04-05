@@ -33,6 +33,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +45,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
 import java.io.FileNotFoundException;
@@ -50,6 +55,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import edu.northeastern.teamprojectgroup16.model.PostModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -119,10 +126,67 @@ public class AddFragment extends Fragment {
                                                 serverDialog.setTitle("Choose a server");
                                                 serverDialog.setItems(serverNames.toArray(new String[0]), (dialogInterface, which) -> {
                                                     String selectedServerName = serverNames.get(which);
+                                                    String selectedfServerId = serverIds.get(which);
+
                                                     Toast.makeText(getActivity(), "You selected server " + selectedServerName, Toast.LENGTH_SHORT).show();
 
                                                     // Here you create a new Post with the selectedServerName, imageUri and caption
                                                     //Post post = new Post(selectedServerName, imageUri, editTextCaption.getText().toString());
+                                                    String caption = editTextCaption.getText().toString();
+
+                                                    // Create a reference to the image file in Firebase Storage
+                                                    StorageReference storageReference = FirebaseStorage.getInstance().getReference("posts");
+                                                    StorageReference imageReference = storageReference.child(UUID.randomUUID().toString());
+
+                                                    // Upload image to Firebase Storage
+                                                    imageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                            // Get the download URL of the uploaded file
+                                                            imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    // Create a new Post with the selectedServerName, download URL and caption
+                                                                    PostModel post = new PostModel(null, caption, uri.toString(), userId);
+
+                                                                    // Create a reference to the new post in Firebase Database
+                                                                    DatabaseReference postReference = FirebaseDatabase.getInstance().getReference("posts");
+                                                                    String postId = postReference.push().getKey();
+                                                                    post.setPostId(postId);
+
+                                                                    if (postId != null) {
+                                                                        postReference.child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                    Toast.makeText(getActivity(), "Post uploaded successfully", Toast.LENGTH_SHORT).show();
+                                                                                } else {
+                                                                                    Toast.makeText(getActivity(), "An error occurred while uploading post", Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            }
+                                                                        });
+
+                                                                        DatabaseReference serverRef = FirebaseDatabase.getInstance().getReference("servers").child(selectedfServerId).child("postIDs");
+                                                                        serverRef.child(postId).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                    Toast.makeText(getActivity(), "Post ID added successfully to server", Toast.LENGTH_SHORT).show();
+                                                                                } else {
+                                                                                    Toast.makeText(getActivity(), "An error occurred while adding Post ID to server", Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(getActivity(), "An error occurred while uploading image", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
 
                                                     // Implement the logic in posting to firebase storage or another backend service
                                                 });
