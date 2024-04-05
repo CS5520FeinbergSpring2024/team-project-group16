@@ -3,7 +3,10 @@ package edu.northeastern.teamprojectgroup16;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,9 @@ public class MessageFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
+
 
     public MessageFragment() {
         // Required empty public constructor
@@ -59,6 +65,9 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_message, container, false);
+
+
+        return rootView;
     }
 }
