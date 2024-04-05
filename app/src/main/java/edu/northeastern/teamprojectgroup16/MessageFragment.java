@@ -1,7 +1,9 @@
 package edu.northeastern.teamprojectgroup16;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +12,8 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,9 +69,25 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_message, container, false);
+        View view = inflater.inflate(R.layout.fragment_message, container, false);
 
+        LinearLayout messageLinearLayout = view.findViewById(R.id.startChat);
+        messageLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start ChatActivity
+                startChatActivity();
+            }
+        });
 
-        return rootView;
+        return view;
+    }
+    private void startChatActivity() {
+        // Start ChatActivity
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        // Pass any necessary data to ChatActivity, such as receiver ID or name
+        intent.putExtra("id", "receiverIdHere");
+        intent.putExtra("name", "receiverNameHere");
+        startActivity(intent);
     }
 }

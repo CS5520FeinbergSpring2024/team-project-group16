@@ -1,17 +1,17 @@
 package edu.northeastern.teamprojectgroup16;
 
-public class MesssageModel {
+public class MessageModel {
     private String messageId;
     private String senderId;
     private String message;
 
-    public MesssageModel(String messageId, String senderId, String message) {
+    public MessageModel(String messageId, String senderId, String message) {
         this.messageId = messageId;
         this.senderId = senderId;
         this.message = message;
     }
 
-    public MesssageModel() {
+    public MessageModel() {
     }
 
     public String getMessageId() {
