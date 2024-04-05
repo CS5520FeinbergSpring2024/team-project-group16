@@ -9,7 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 
 public class ChatActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
-//  l  UsersAdapter userAdapter;
+    UserAdapter userAdapter;
     RecyclerView recyclerView;
 
     @Override
