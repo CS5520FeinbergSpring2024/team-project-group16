@@ -47,6 +47,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -88,44 +89,58 @@ public class AddFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (imageUri != null && !editTextCaption.getText().toString().isEmpty()) {
-
                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                    if(firebaseUser != null){
+                    if (firebaseUser != null) {
                         String userId = firebaseUser.getUid();
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(userId).child("serverIds");
 
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(userId);
                         reference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                UserModel currentUser = snapshot.getValue(UserModel.class);
+                                List<String> serverIds = new ArrayList<>();
+                                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                                    if (childSnapshot.getValue(Boolean.class)) {
+                                        serverIds.add(childSnapshot.getKey());
+                                    }
+                                }
 
-                                if(currentUser != null) {
-                                    List<String> serverNames = currentUser.getServerIds(); // Assuming serverIds actually contains the server names
-
-                                    CharSequence[] servers = serverNames.toArray(new CharSequence[0]);
-
-                                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                                    dialog.setTitle("Choose a server");
-                                    dialog.setItems(servers, new DialogInterface.OnClickListener() {
+                                List<String> serverNames = new ArrayList<>();
+                                for (String serverId : serverIds) {
+                                    DatabaseReference serverReference = FirebaseDatabase.getInstance().getReference("servers").child(serverId).child("serverName");
+                                    serverReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            String selectedServer = servers[i].toString();
-                                            Toast.makeText(getActivity(), "You selected " + selectedServer, Toast.LENGTH_SHORT).show();
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            String serverName = snapshot.getValue(String.class);
+                                            serverNames.add(serverName);
 
-                                            // Create a new Post with the server name, imageUri and following caption
-                                            //Post post = new Post(selectedServer, imageUri, editTextCaption.getText().toString());
+                                            if (serverNames.size() == serverIds.size()) {
+                                                AlertDialog.Builder serverDialog = new AlertDialog.Builder(getActivity());
+                                                serverDialog.setTitle("Choose a server");
+                                                serverDialog.setItems(serverNames.toArray(new String[0]), (dialogInterface, which) -> {
+                                                    String selectedServerName = serverNames.get(which);
+                                                    Toast.makeText(getActivity(), "You selected server " + selectedServerName, Toast.LENGTH_SHORT).show();
 
-                                            // TODO: Implement the logic in posting to Firebase Storage or another backend service using the post object created
+                                                    // Here you create a new Post with the selectedServerName, imageUri and caption
+                                                    //Post post = new Post(selectedServerName, imageUri, editTextCaption.getText().toString());
+
+                                                    // Implement the logic in posting to firebase storage or another backend service
+                                                });
+                                                serverDialog.show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            // Handle error here
                                         }
                                     });
-                                    dialog.show();
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                // Handle error
+                                // Handle error here
                             }
                         });
                     }
