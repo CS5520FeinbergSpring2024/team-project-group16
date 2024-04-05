@@ -5,15 +5,19 @@ public class PostModel {
     private String title;
     private String imageUrl;
     private String userId;
+    private String serverId;
+    private String text;
 
     public PostModel() {
     }
 
-    public PostModel(String postId, String title, String imageUrl, String userId){
+    public PostModel(String postId, String title, String imageUrl, String userId, String serverId, String text){
         this.postId = postId;
         this.title = title;
         this.imageUrl = imageUrl;
         this.userId = userId;
+        this.text = text;
+        this.serverId = serverId;
     }
 
     public String getImageUrl() {

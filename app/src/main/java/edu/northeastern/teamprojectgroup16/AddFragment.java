@@ -68,6 +68,7 @@ public class AddFragment extends Fragment {
     private static final int REQUEST_PERMISSION = 2;
     ImageView imageViewPost;
     EditText editTextCaption;
+    EditText textContent;
     Button buttonPost;
     Uri imageUri;
 
@@ -146,8 +147,8 @@ public class AddFragment extends Fragment {
                                                             imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                 @Override
                                                                 public void onSuccess(Uri uri) {
-                                                                    // Create a new Post with the selectedServerName, download URL and caption
-                                                                    PostModel post = new PostModel(null, caption, uri.toString(), userId);
+                                                                    // Create a new Post
+                                                                    PostModel post = new PostModel(null, caption, uri.toString(), userId, " ", selectedfServerId);
 
                                                                     // Create a reference to the new post in Firebase Database
                                                                     DatabaseReference postReference = FirebaseDatabase.getInstance().getReference("posts");
