@@ -56,47 +56,35 @@ public class SearchFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean userFound = false;
-                UserModel userModel = null;
-
-                // Check if there's a matching user
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    userModel = userSnapshot.getValue(UserModel.class);
+                    UserModel userModel = userSnapshot.getValue(UserModel.class);
                     if (userModel != null) {
-                        userFound = true;
-                        break;  // Found the first matching user, exit loop
+                        displayUserDetails(userModel);
+                        return;
                     }
                 }
-
-                // If user is found, display user details in AfterSearchFragment
-                if (userFound && userModel != null) {
-                    displayUserDetails(userModel);
-                } else {
-                    // Handle if no matching user found
-                    Toast.makeText(getContext(), "User not found", Toast.LENGTH_SHORT).show();
-                }
+                // Handle if no matching user found
+                // For example: show a toast message or update UI
+                Toast.makeText(getContext(), "User not found", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle database query cancellation or error
-                Log.e("SearchFragment", "Database error: " + databaseError.getMessage());
+                Toast.makeText(getContext(), "Database error", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void displayUserDetails(UserModel userModel) {
-        // Check if fragment is attached to an activity and not in a bad state
-        if (isAdded() && getContext() != null) {
-            AfterSearchFragment afterSearchFragment = AfterSearchFragment.newInstance(userModel.getUserName(), userModel.getUserEmail());
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, afterSearchFragment)
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            Log.e("SearchFragment", "Fragment not attached or context is null");
-        }
+        // Navigate to AfterSearchFragment and pass user details
+        AfterSearchFragment afterSearchFragment = AfterSearchFragment.newInstance(userModel.getUserName(), userModel.getUserEmail());
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, afterSearchFragment) // Assuming R.id.frameLayout is your fragment container
+                .addToBackStack(null)
+                .commit();
     }
+
 
 
     private void showToast(String message) {
