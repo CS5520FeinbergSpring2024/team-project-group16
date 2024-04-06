@@ -5,43 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:layout_marginTop="50dp"
-    tools:context=".SearchFragment">
+    tools:context=".AfterSearchFragment">
 
-    <!-- Posts category -->
+    <!-- User's Username -->
     <TextView
-        android:id="@+id/tvPosts"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Posts"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/bottom_line_selected"
-        android:textColor="@color/black" />
-
-    <!-- Accounts category -->
-    <TextView
-        android:id="@+id/tvAccounts"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Accounts"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/bottom_line_unselected"
-        android:textColor="@color/black" />
-
-    <!-- Guideline to align Posts and Accounts -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/textViewUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp"
+        tools:text="Username" />
+
+    <!-- User's Email -->
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        tools:text="user@example.com" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

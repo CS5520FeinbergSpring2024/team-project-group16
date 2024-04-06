@@ -1,3 +1,5 @@
+package edu.northeastern.teamprojectgroup16;
+
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,17 +52,15 @@ public class SearchFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Clear previous search results if any
-                // Iterate through search results (should be at most one)
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     UserModel userModel = userSnapshot.getValue(UserModel.class);
                     if (userModel != null) {
-                        // Display user details in AfterSearchFragment
                         displayUserDetails(userModel);
-                        return; // Stop after finding the first matching user
+                        return;
                     }
                 }
                 // Handle if no matching user found
+                // For example: show a toast message or update UI
             }
 
             @Override

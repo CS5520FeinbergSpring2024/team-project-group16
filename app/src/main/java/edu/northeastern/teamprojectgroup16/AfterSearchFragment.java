@@ -1,12 +1,10 @@
 package edu.northeastern.teamprojectgroup16;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,7 +23,6 @@ public class AfterSearchFragment extends Fragment {
         return fragment;
     }
 
-    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,7 +31,6 @@ public class AfterSearchFragment extends Fragment {
         textViewUsername = view.findViewById(R.id.textViewUsername);
         textViewEmail = view.findViewById(R.id.textViewEmail);
 
-        // Retrieve arguments (username, email) passed to this fragment
         Bundle args = getArguments();
         if (args != null) {
             String username = args.getString("username");
