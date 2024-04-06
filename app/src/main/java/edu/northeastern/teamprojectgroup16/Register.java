@@ -23,6 +23,10 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+
+import edu.northeastern.teamprojectgroup16.model.UserModel;
+
 public class Register extends AppCompatActivity {
 
     EditText editTextFName, editTextLName, editTextUName, editTextEmail, editTextPassword;
@@ -96,7 +100,7 @@ public class Register extends AppCompatActivity {
                                             .setDisplayName(userName).build();
                                     user.updateProfile(profileUpdates);
 
-                                    UserModel userModel = new UserModel(user.getUid(), userName, email, password);
+                                    UserModel userModel = new UserModel(user.getUid(), userName, email, password, new ArrayList<>());
 
                                     databaseReference = FirebaseDatabase.getInstance().getReference("users");
                                     databaseReference.child("users");

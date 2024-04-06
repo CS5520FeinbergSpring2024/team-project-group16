@@ -1,12 +1,16 @@
 package edu.northeastern.teamprojectgroup16;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserModel {
     String userID;
     String userName;
     String userEmail;
     String userPassword;
-
+    List<String> serverId;
     public UserModel() {
+        this.serverId = new ArrayList<>();
     }
 
     public UserModel(String userID, String userName, String userEmail, String userPassword) {
@@ -14,6 +18,7 @@ public class UserModel {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
+        this.serverId = new ArrayList<>();
     }
 
     public String getUserID() {
@@ -46,5 +51,9 @@ public class UserModel {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public List<String> getServerIds() {
+        return serverId;
     }
 }
