@@ -135,7 +135,7 @@ public class AddFragment extends Fragment {
                                                                 @Override
                                                                 public void onSuccess(Uri uri) {
                                                                     // Create a new Post
-                                                                    PostModel post = new PostModel(null, caption, uri.toString(), userId, " ", selectedfServerId);
+                                                                    PostModel post = new PostModel(null, caption, uri.toString(), userId, " ", selectedfServerId, 0, null, null);
 
                                                                     // Create a reference to the new post in Firebase Database
                                                                     DatabaseReference postReference = FirebaseDatabase.getInstance().getReference("posts");
