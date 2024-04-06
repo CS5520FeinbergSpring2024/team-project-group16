@@ -54,7 +54,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         void setHomeData(HomeModel homeModel) {
             binding.TextName.setText(homeModel.getUserName());
-            binding.TextTime.setText(homeModel.getTimestamp());
+            binding.textTime.setText(homeModel.getTimestamp());
             // like count
             int count = homeModel.getLikeCount();
             if (count == 0) {
