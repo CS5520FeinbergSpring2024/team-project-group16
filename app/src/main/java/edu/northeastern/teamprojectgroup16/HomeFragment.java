@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.checkerframework.common.subtyping.qual.Bottom;
 
@@ -194,17 +202,61 @@ public class HomeFragment extends Fragment {
     }
 
     private void saveCodeAndPassword(LinearLayout circleContainer, int index, String code) {
-        // TODO: save data to firebase or verify the firebase server accessability
-        ImageView circleImageView = new ImageView(getContext());
-        circleImageView.setImageResource(circleImages[index]);
-        circleImageView.setOnClickListener(new View.OnClickListener() {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference serverRef = FirebaseDatabase.getInstance().getReference("servers");
+        serverRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                // Handle circle click event
-                handleCircleClick(index);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean codeExist = false;
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    DataSnapshot serverIDSnapshot = userSnapshot.child("serverIDs");
+                    if (serverIDSnapshot.exists()) {
+                        for (DataSnapshot serverID : serverIDSnapshot.getChildren()) {
+                            String serverIDValue = serverID.getValue(String.class);
+                            if (serverIDValue != null && serverIDValue.equals(code)) {
+                                // Code exists, proceed with adding IDs to tables
+                                String userID = userSnapshot.getKey();
+                                String serverIDKey = serverID.getKey();
+
+                                DatabaseReference serverRef = FirebaseDatabase.getInstance().getReference().child("server").child(serverIDKey);
+                                String newUserID = serverRef.push().getKey();
+                                serverRef.child(newUserID).setValue(userID);
+
+                                DatabaseReference userServerRef = FirebaseDatabase.getInstance().getReference().child("user").child(userID);
+                                String newServerID = userServerRef.push().getKey();
+                                userServerRef.child(newServerID).setValue(serverIDKey);
+
+                                ImageView circleImageView = new ImageView(getContext());
+                                circleImageView.setImageResource(circleImages[index]);
+                                circleImageView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // Handle circle click event
+                                        handleCircleClick(index);
+                                    }
+                                });
+                                circleContainer.addView(circleImageView);
+                                codeExist = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!codeExist) {
+                    // Code does not exist, display an error message to the user
+                    Toast.makeText(getContext(), "Invalid code. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
-        circleContainer.addView(circleImageView);
+        // TODO: save data to firebase or verify the firebase server accessability
+
     }
 
     private void handleCircleClick(int index) {
