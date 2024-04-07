@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,14 +47,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("Create Server", "Clicked");
                 Context context = MainActivity.this;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Enter the Name of Server");
+                builder.setTitle("Enter the Name and Code of Server");
 
+                final EditText nameInput = new EditText(context);
+                nameInput.setHint("Enter the Name");
                 final EditText codeInput = new EditText(context);
-                codeInput.setHint("Enter the Name");
+                codeInput.setHint("Enter the Code");
 
-                builder.setView(codeInput);
+                final LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                layout.addView(nameInput);
+                layout.addView(codeInput);
 
-                builder.setPositiveButton("OK", (dialog, which) -> addServer(codeInput.getText().toString()));
+                builder.setView(layout);
+
+                builder.setPositiveButton("OK", (dialog, which) -> addServer(nameInput.getText().toString(), codeInput.getText().toString()));
 
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
@@ -63,11 +71,12 @@ public class MainActivity extends AppCompatActivity {
         setListeners();
     }
 
-    private void addServer(String serverName){
+    private void addServer(String serverName, String code){
 
         // Create a ServerModel object
         ServerModel newServer = new ServerModel();
         newServer.setServerName(serverName);
+        newServer.setCode(code);
 
         // Get the current user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

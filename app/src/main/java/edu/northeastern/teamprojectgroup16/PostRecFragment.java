@@ -47,7 +47,7 @@ public class PostRecFragment extends Fragment {
         postAdapter = new PostRecAdapter(postRecList, requireContext());
         postRecyclerView.setAdapter(postAdapter);
 
-        FirebaseDatabase.getInstance().getReference("Posts")
+        FirebaseDatabase.getInstance().getReference("posts")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

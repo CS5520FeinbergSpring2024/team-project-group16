@@ -98,8 +98,8 @@ public class HomeFragment extends Fragment {
         LinearLayout circleContainer = rootView.findViewById(R.id.circleContainer);
         updateServerBar(circleContainer);
 
-        postRecFragment = new PostRecFragment();
-        imageRecFragment = new ImageRecFragment();
+//        postRecFragment = new PostRecFragment();
+//        imageRecFragment = new ImageRecFragment();
 
         nestedScrollView = rootView.findViewById(R.id.homeScrollView);
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -144,13 +144,13 @@ public class HomeFragment extends Fragment {
 
     private void showImageRecyclerView() {
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.recyclerViewContainer, imageRecFragment)
+                .replace(R.id.recyclerViewContainer, new ImageRecFragment())
                 .commit();
     }
 
     private void showPostRecyclerView() {
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.recyclerViewContainer, postRecFragment)
+                .replace(R.id.recyclerViewContainer, new PostRecFragment())
                 .commit();
     }
 
