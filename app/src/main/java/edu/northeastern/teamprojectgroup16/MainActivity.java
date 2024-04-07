@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("ServerAdd", "Error adding server", e);
                         }
                     });
+            dbRef.child("servers").child(serverId).child("code").setValue(code);
         }
     }
     private void setListeners() {
