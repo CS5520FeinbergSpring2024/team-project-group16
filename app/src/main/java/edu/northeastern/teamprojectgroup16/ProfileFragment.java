@@ -70,6 +70,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,6 +86,7 @@ public class ProfileFragment extends Fragment {
     private TextView textViewUsername;
     private TextView textViewEmail;
     Button btnLogOut;
+    ImageView favoriteButton;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -96,6 +99,16 @@ public class ProfileFragment extends Fragment {
 
         textViewUsername = rootView.findViewById(R.id.textViewUsername);
         textViewEmail = rootView.findViewById(R.id.textViewEmail);
+        favoriteButton = rootView.findViewById(R.id.relates);
+
+        // Go to the favorite activity
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FavoriteActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Retrieve the current user from Firebase Authentication
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
