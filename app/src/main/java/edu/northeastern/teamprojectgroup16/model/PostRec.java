@@ -1,4 +1,4 @@
-package edu.northeastern.teamprojectgroup16;
+package edu.northeastern.teamprojectgroup16.model;
 
 public class PostRec {
     private String imageUrl;

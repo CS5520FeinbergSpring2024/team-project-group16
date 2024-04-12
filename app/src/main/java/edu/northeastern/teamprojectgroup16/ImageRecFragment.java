@@ -19,6 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.northeastern.teamprojectgroup16.model.ImageRec;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ImageRecFragment#newInstance} factory method to

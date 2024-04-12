@@ -1,4 +1,4 @@
-package edu.northeastern.teamprojectgroup16;
+package edu.northeastern.teamprojectgroup16.fragments;
 
 import android.os.Bundle;
 
@@ -10,9 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.northeastern.teamprojectgroup16.R;
+import edu.northeastern.teamprojectgroup16.adapters.PostRecAdapter;
 import edu.northeastern.teamprojectgroup16.model.PostModel;
 
 
@@ -31,6 +32,7 @@ public class PostRecFragment extends Fragment {
     private RecyclerView postRecyclerView;
     private PostRecAdapter postAdapter;
     private List<PostModel> postRecList;
+
 
     public PostRecFragment() {
         // Required empty public constructor

@@ -11,20 +11,13 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.checkerframework.common.subtyping.qual.Bottom;
-
-import java.util.ArrayList;
-import java.util.List;
+import edu.northeastern.teamprojectgroup16.fragments.PostRecFragment;
 
 /**
  * A simple {@link Fragment} subclass.

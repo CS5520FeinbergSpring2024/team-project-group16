@@ -1,4 +1,4 @@
-package edu.northeastern.teamprojectgroup16;
+package edu.northeastern.teamprojectgroup16.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Date;
 import java.util.List;
 
+import edu.northeastern.teamprojectgroup16.R;
 import edu.northeastern.teamprojectgroup16.model.PostModel;
 
 public class PostRecAdapter extends RecyclerView.Adapter<PostRecAdapter.PostViewHolder> {
@@ -32,10 +33,9 @@ public class PostRecAdapter extends RecyclerView.Adapter<PostRecAdapter.PostView
     private Context context;
     ImageButton favorite_btn;
     DatabaseReference favoriteRef;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FirebaseDatabase db = FirebaseDatabase.getInstance();
     Boolean favoriteChecker = false;
     DatabaseReference favorite_list_ref;
-
     PostModel post;
 
     public PostRecAdapter(List<PostModel> postList, Context context) {
@@ -141,7 +141,7 @@ public class PostRecAdapter extends RecyclerView.Adapter<PostRecAdapter.PostView
         TextView titleTextView;
         String currentUserId;
 
-        DatabaseReference databaseReference, favorite_ref, favorite_list_ref;
+        DatabaseReference favorite_ref, favorite_list_ref;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
