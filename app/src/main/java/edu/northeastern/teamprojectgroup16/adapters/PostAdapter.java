@@ -55,6 +55,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 .load(postModel.getImageUrl())
                 .into(holder.imageView);
         // TODO
+
+        // like count
+        int count = postModel.getLikeCount();
+        if (count == 0) {
+            holder.likeCount.setVisibility(View.INVISIBLE);
+        } else if (count == 1) {
+            holder.likeCount.setText(String.format("%d %s", count, "like"));
+        } else {
+            holder.likeCount.setText(count + " likes");
+        }
     }
 
     @Override
