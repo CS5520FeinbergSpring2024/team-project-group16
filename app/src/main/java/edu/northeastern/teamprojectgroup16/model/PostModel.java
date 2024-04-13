@@ -99,4 +99,19 @@ public class PostModel {
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "PostModel{" +
+                "postId='" + postId + '\'' +
+                ", title='" + title + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", userId='" + userId + '\'' +
+                ", serverId='" + serverId + '\'' +
+                ", text='" + text + '\'' +
+                ", likeCount=" + likeCount +
+                ", comment='" + comment + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

@@ -62,7 +62,8 @@ public class PostRecFragment extends Fragment {
     }
 
     private void fetchData() {
-        DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("Posts");
+        DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
+
         postsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -73,8 +74,9 @@ public class PostRecFragment extends Fragment {
                     // TODO: fetch other fields
                     PostModel post = new PostModel(null, title, imageUrl, null, null, null, 0, null, null);
                     postRecList.add(post);
-
+                    Log.e("Post", String.valueOf(post));
                 }
+
                 postAdapter.notifyDataSetChanged();
             }
 
