@@ -23,8 +23,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.northeastern.teamprojectgroup16.databinding.ActivityMainBinding;
 import edu.northeastern.teamprojectgroup16.fragments.HomeFragment;
+import edu.northeastern.teamprojectgroup16.fragments.ProfileFragment;
 import edu.northeastern.teamprojectgroup16.model.ServerModel;
 
 
@@ -42,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
         btnCreateServer = findViewById(R.id.buttonCreateServer);
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            initializeUserData(user);
+        }
         btnCreateServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +81,17 @@ public class MainActivity extends AppCompatActivity {
         });
         setListeners();
     }
+
+    private void initializeUserData(FirebaseUser user) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("savedPosts", new ArrayList<>()); // 初始化 savedPosts 为一个空列表
+
+        userRef.updateChildren(updates)
+                .addOnSuccessListener(aVoid -> Log.d("InitUserData", "User data initialized successfully"))
+                .addOnFailureListener(e -> Log.e("InitUserData", "Failed to initialize user data", e));
+    }
+
 
     private void addServer(String serverName, String code){
 

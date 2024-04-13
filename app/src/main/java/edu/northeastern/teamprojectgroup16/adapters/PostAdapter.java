@@ -1,5 +1,6 @@
 package edu.northeastern.teamprojectgroup16.adapters;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,22 +8,32 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.northeastern.teamprojectgroup16.R;
@@ -32,9 +43,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private List<PostModel> postList;
     FirebaseFirestore db;
     DocumentReference userReference;
+    private static Context context;
 
-    public PostAdapter(List<PostModel> postList) {
+    public PostAdapter(List<PostModel> postList, Context context) {
         this.postList = postList;
+        this.context = context;
     }
 
     @NonNull
@@ -104,6 +117,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         boolean isSaved = false; // track if it's saved
         public static DocumentReference userReference;
         public PostModel post;
+        private String userId;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -116,6 +130,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             filledHeartButton = itemView.findViewById(R.id.likeButton2);
             repostButton = itemView.findViewById(R.id.repostButton);
             likeCount = itemView.findViewById(R.id.textLikeCount);
+
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            userId = firebaseUser.getUid();
             
             setupLikeButton();
             setupSaveButton();
@@ -152,17 +169,45 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 filledHeartButton.setVisibility(View.GONE);
             }
         }
+
         private void updateSavedData() {
-            DocumentReference postReference = FirebaseFirestore.getInstance().collection("posts").document(post.getPostId());
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
             if (isSaved) {
-                userReference.update("saved", FieldValue.arrayUnion(postReference));
-//                Log.e("PostReference", post.toString());
+                DatabaseReference savedRef = userRef.child("savedPosts").push();
+                savedRef.setValue(post.getPostId())
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d("FirebaseDB", "Post ID added to savedPosts successfully");
+                            Toast.makeText(context.getApplicationContext(), "Post saved successfully", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("FirebaseDB Error", "Failed to add post ID to savedPosts", e);
+                            Toast.makeText(context, "Failed to save post", Toast.LENGTH_SHORT).show();
+                        });
             } else {
-                userReference.update("saved", FieldValue.arrayRemove(postReference));
+                userRef.child("savedPosts").orderByValue().equalTo(post.getPostId())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                                    childSnapshot.getRef().removeValue()  // 移除该 postId
+                                            .addOnSuccessListener(aVoid -> Log.d("FirebaseDB", "Post ID removed from savedPosts successfully"))
+                                            .addOnFailureListener(e -> Log.e("FirebaseDB Error", "Failed to remove post ID from savedPosts", e));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Log.e("FirebaseDB Error", "Error fetching savedPosts", databaseError.toException());
+                            }
+                        });
             }
             update();
         }
 
+        /**
+         * Update the count of likes
+         */
         void updateLikesData() {
             DocumentReference postReference = FirebaseFirestore.getInstance().collection("posts").document(post.getPostId());
             if (isLiked) {

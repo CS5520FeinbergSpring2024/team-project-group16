@@ -55,7 +55,7 @@ public class PostRecFragment extends Fragment {
         postRecyclerView.setHasFixedSize(true);
 
         postRecList = new ArrayList<>(); // Create a list of sample posts
-        postAdapter = new PostAdapter(postRecList);
+        postAdapter = new PostAdapter(postRecList, getContext());
         postRecyclerView.setAdapter(postAdapter);
 
         // Inflate the layout for this fragment

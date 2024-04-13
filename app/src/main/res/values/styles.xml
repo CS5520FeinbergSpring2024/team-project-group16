@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Header.Title" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/text_very_strong</item>
+        <item name="android:fontFamily">@font/varela_round</item>
+    </style>
+</resources>

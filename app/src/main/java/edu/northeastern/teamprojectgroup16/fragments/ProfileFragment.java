@@ -62,7 +62,7 @@
       //  return inflater.inflate(R.layout.fragment_profile, container, false);
     //}
 //}
-package edu.northeastern.teamprojectgroup16;
+package edu.northeastern.teamprojectgroup16.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,7 +70,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +79,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import edu.northeastern.teamprojectgroup16.activities.FavoriteActivity;
+import edu.northeastern.teamprojectgroup16.Login;
+import edu.northeastern.teamprojectgroup16.R;
 
 public class ProfileFragment extends Fragment {
 
