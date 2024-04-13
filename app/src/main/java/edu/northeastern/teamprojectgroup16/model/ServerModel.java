@@ -8,17 +8,19 @@ public class ServerModel {
     String serverName;
     List<String> memberIDs; // List of user IDs that are members of this server
     List<String> postIDs; // List of post IDs in this server
+    String code;
 
     public ServerModel() {
         this.memberIDs = new ArrayList<>();
         this.postIDs = new ArrayList<>();
     }
 
-    public ServerModel(String serverID, String serverName) {
+    public ServerModel(String serverID, String serverName, String code) {
         this.serverID = serverID;
         this.serverName = serverName;
         this.memberIDs = new ArrayList<>();
         this.postIDs = new ArrayList<>();
+        this.code = code;
     }
 
     // Getters and Setters for the ServerModel fields
@@ -50,6 +52,8 @@ public class ServerModel {
     public void addMember(String memberId){
         this.memberIDs.add(memberId);
     }
+
+    public void setCode(String code){this.code = code;}
 
     public void addPosts(String postId){
         this.postIDs.add(postId);
