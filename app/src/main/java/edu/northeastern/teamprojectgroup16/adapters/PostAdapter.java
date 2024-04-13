@@ -1,5 +1,6 @@
 package edu.northeastern.teamprojectgroup16.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostModel postModel = postList.get(position);
+        Log.e("PostAdapter", postModel.toString());
+        Log.e("Post Adapter: title", postModel.getTitle());
         holder.textName.setText(postModel.getTitle());
         holder.textTime.setText(formatDate(postModel.getTimestamp()));
         Glide.with(holder.imageView.getContext())

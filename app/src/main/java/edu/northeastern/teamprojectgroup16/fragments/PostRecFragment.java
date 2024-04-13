@@ -69,10 +69,7 @@ public class PostRecFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 postRecList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String title = snapshot.child("title").getValue(String.class);
-                    String imageUrl = snapshot.child("imageUrl").getValue(String.class);
-                    // TODO: fetch other fields
-                    PostModel post = new PostModel(null, title, imageUrl, null, null, null, 0, null, null);
+                    PostModel post = snapshot.getValue(PostModel.class);
                     postRecList.add(post);
                     Log.e("Post", String.valueOf(post));
                 }
