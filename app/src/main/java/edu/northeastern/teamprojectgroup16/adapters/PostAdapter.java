@@ -33,7 +33,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostAdapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_post_rec, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
         return new PostViewHolder(view);
     }
 
@@ -42,6 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         return sdf.format(timestamp);
     }
+
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostModel postModel = postList.get(position);
