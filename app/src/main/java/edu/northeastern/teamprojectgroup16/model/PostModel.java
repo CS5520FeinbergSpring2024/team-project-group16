@@ -12,8 +12,22 @@ public class PostModel {
     private int likeCount; // the count of likes
     private String comment; // comments
     private Date timestamp;
+    private String userName;
 
     public PostModel() {
+    }
+
+    public PostModel(String postId, String title, String imageUrl, String userId, String serverId, String text, int likeCount, String comment, Date timestamp, String userName) {
+        this.postId = postId;
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.userId = userId;
+        this.serverId = serverId;
+        this.text = text;
+        this.likeCount = likeCount;
+        this.comment = comment;
+        this.timestamp = timestamp;
+        this.userName = userName;
     }
 
     public PostModel(String postId, String title, String imageUrl, String userId, String serverId, String text, int likeCount, String comment, Date timestamp) {
@@ -36,6 +50,10 @@ public class PostModel {
         return title;
     }
 
+//    public String getUserName() {
+//        return userName;
+//    }
+
     public String getUserId() {
         return userId;
     }
@@ -47,6 +65,7 @@ public class PostModel {
     public void setPostId(String postId) {
         this.postId = postId;
     }
+//    public void setUserName(String userName) {this.userName = userName;}
 
     public void setTitle(String title) {
         this.title = title;
@@ -112,6 +131,7 @@ public class PostModel {
                 ", likeCount=" + likeCount +
                 ", comment='" + comment + '\'' +
                 ", timestamp=" + timestamp +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostAdapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_todo, parent, false);
         return new PostViewHolder(view);
     }
 
@@ -48,8 +49,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         PostModel postModel = postList.get(position);
         Log.e("PostAdapter", postModel.toString());
         Log.e("Post Adapter: title", postModel.getTitle());
+//        holder.userName.setText(postModel.getUserName());
         holder.textName.setText(postModel.getTitle());
-        holder.textTime.setText(formatDate(postModel.getTimestamp()));
         Glide.with(holder.imageView.getContext())
                 .load(postModel.getImageUrl())
                 .into(holder.imageView);
@@ -69,27 +70,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         CircleImageView profileImage;
         TextView textName;
-        TextView textTime;
-        ImageView postImageView;
+        TextView userName;
         ImageView imageView;
         ImageButton likeButton;
         ImageButton starButton;
-        ImageButton commentButton;
         ImageButton repostButton;
-        ImageButton reportButton;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            postImageView = itemView.findViewById(R.id.postImageView);
             starButton = itemView.findViewById(R.id.starButton);
             profileImage = itemView.findViewById(R.id.profileImage);
+            userName = itemView.findViewById(R.id.username);
             textName = itemView.findViewById(R.id.TextName);
-            textTime = itemView.findViewById(R.id.textTime);
             imageView = itemView.findViewById(R.id.imageView);
             likeButton = itemView.findViewById(R.id.likeButton);
-            commentButton = itemView.findViewById(R.id.commentButton);
             repostButton = itemView.findViewById(R.id.repostButton);
-            reportButton = itemView.findViewById(R.id.exclamationMarkButton);
         }
     }
 }

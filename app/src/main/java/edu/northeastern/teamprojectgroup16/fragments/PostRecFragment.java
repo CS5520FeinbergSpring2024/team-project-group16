@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +51,7 @@ public class PostRecFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_post_rec, container, false);
         postRecyclerView = rootView.findViewById(R.id.postRecyclerView);
-        postRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        postRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         postRecyclerView.setHasFixedSize(true);
 
         postRecList = new ArrayList<>(); // Create a list of sample posts
@@ -63,7 +64,7 @@ public class PostRecFragment extends Fragment {
 
     private void fetchData() {
         DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
-
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child("userID");
         postsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -84,6 +85,24 @@ public class PostRecFragment extends Fragment {
                 Toast.makeText(getContext(), "Failed to load posts.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // TODO: Fetch Username
+//        userRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    String username = dataSnapshot.child("userName").getValue(String.class);
+//                    for (PostModel model : postRecList){
+//                        model.setUserName(username);
+//                    }
+//                }
+//                postAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }});
     }
 
     @Override

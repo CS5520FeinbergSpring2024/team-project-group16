@@ -69,4 +69,5 @@
     <string name="post_title">Post Title</string>
     <string name="log_out">Log Out</string>
     <string name="favorite_list">Favorite List</string>
+    <string name="title">title</string>
 </resources>
