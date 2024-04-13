@@ -1,3 +1,4 @@
+/*
 package edu.northeastern.teamprojectgroup16.adapters;
 
 import android.content.Context;
@@ -20,11 +21,16 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import edu.northeastern.teamprojectgroup16.R;
 import edu.northeastern.teamprojectgroup16.model.PostModel;
 
@@ -37,6 +43,7 @@ public class PostRecAdapter extends RecyclerView.Adapter<PostRecAdapter.PostView
     Boolean favoriteChecker = false;
     DatabaseReference favorite_list_ref;
     PostModel post;
+    RecyclerView postRecyclerView;
 
     public PostRecAdapter(List<PostModel> postList, Context context) {
         this.postList = postList;
@@ -46,13 +53,21 @@ public class PostRecAdapter extends RecyclerView.Adapter<PostRecAdapter.PostView
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_post_rec, parent, false);
+
+//        postRecyclerView = view.findViewById(R.id.postRecyclerView);
+//        postRecyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+//
+
         return new PostViewHolder(view);
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
+
+
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
         String currentUserId = user.getUid();
@@ -135,9 +150,10 @@ public class PostRecAdapter extends RecyclerView.Adapter<PostRecAdapter.PostView
         return postList.size();
     }
 
+
+
     public static class PostViewHolder extends RecyclerView.ViewHolder {
-        ImageView postImageView;
-        ImageButton starButton;
+
         TextView titleTextView;
         String currentUserId;
 
@@ -151,9 +167,7 @@ public class PostRecAdapter extends RecyclerView.Adapter<PostRecAdapter.PostView
             currentUserId = user.getUid();
             favorite_ref = FirebaseDatabase.getInstance().getReference("favourites");
             favorite_list_ref = FirebaseDatabase.getInstance().getReference("favouriteList").child(currentUserId);
-            postImageView = itemView.findViewById(R.id.postImageView);
-            starButton = itemView.findViewById(R.id.starButton);
-            titleTextView = itemView.findViewById(R.id.titleTextView);
+
         }
 
         public void favoriteChecker(String postId) {
@@ -176,3 +190,5 @@ public class PostRecAdapter extends RecyclerView.Adapter<PostRecAdapter.PostView
         }
     }
 }
+
+ */

@@ -18,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.northeastern.teamprojectgroup16.adapters.PostRecAdapter;
+import edu.northeastern.teamprojectgroup16.adapters.PostAdapter;
 import edu.northeastern.teamprojectgroup16.model.PostModel;
 
 /**
@@ -26,7 +26,7 @@ import edu.northeastern.teamprojectgroup16.model.PostModel;
  */
 public class FavoriteActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    PostRecAdapter postAdapter;
+    PostAdapter postAdapter;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference;
     private List<PostModel> postList = new ArrayList<>();
@@ -49,7 +49,7 @@ public class FavoriteActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference("favouriteList").child(currentUserId);
 
         // set adapter
-        postAdapter = new PostRecAdapter(postList, this);
+        postAdapter = new PostAdapter(postList);
         recyclerView.setAdapter(postAdapter);
         loadData();
     }
