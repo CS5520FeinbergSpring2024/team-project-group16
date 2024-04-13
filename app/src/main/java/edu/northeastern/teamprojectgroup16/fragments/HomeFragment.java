@@ -132,6 +132,9 @@ public class HomeFragment extends Fragment {
                 showPostRecyclerView();
             }
         });
+
+        // TODO: fetch user server
+        // fecthServer();
     
         return rootView;
     }
@@ -188,52 +191,35 @@ public class HomeFragment extends Fragment {
     }
 
     private void saveCodeAndPassword(LinearLayout circleContainer, int index, String code) {
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference serverRef = FirebaseDatabase.getInstance().getReference("servers");
-        serverRef.addValueEventListener(new ValueEventListener() {
+        serverRef.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean codeExist = false;
-                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    DataSnapshot serverIDSnapshot = userSnapshot.child("serverIDs");
-                    if (serverIDSnapshot.exists()) {
-                        for (DataSnapshot serverID : serverIDSnapshot.getChildren()) {
-                            String serverIDValue = serverID.getValue(String.class);
-                            if (serverIDValue != null && serverIDValue.equals(code)) {
-                                // Code exists, proceed with adding IDs to tables
-                                String userID = userSnapshot.getKey();
-                                String serverIDKey = serverID.getKey();
+                if (snapshot.exists()){
+                    for (DataSnapshot serverSnapshot : snapshot.getChildren()) {
+                        String serverId = serverSnapshot.getKey();
+                        String userId = user.getUid();
+                        // Add the user to the server's members list
+                        addMemberToServer(serverId, userId);
 
-                                DatabaseReference serverRef = FirebaseDatabase.getInstance().getReference().child("server").child(serverIDKey);
-                                String newUserID = serverRef.push().getKey();
-                                serverRef.child(newUserID).setValue(userID);
+                        // Add the server to the user's servers list
+                        addUserToServer(userId, serverId);
 
-                                DatabaseReference userServerRef = FirebaseDatabase.getInstance().getReference().child("user").child(userID);
-                                String newServerID = userServerRef.push().getKey();
-                                userServerRef.child(newServerID).setValue(serverIDKey);
-
-                                ImageView circleImageView = new ImageView(getContext());
-                                circleImageView.setImageResource(circleImages[index]);
-                                circleImageView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        // Handle circle click event
-                                        handleCircleClick(index);
-                                    }
-                                });
-                                circleContainer.addView(circleImageView);
-                                codeExist = true;
-                                break;
-                            }
-                        }
                     }
-                }
-                if (!codeExist) {
-                    // Code does not exist, display an error message to the user
+                    ImageView circleImageView = new ImageView(getContext());
+                    circleImageView.setImageResource(circleImages[index]);
+                    circleImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Handle circle click event
+                            handleCircleClick(index);
+                        }
+                    });
+                    circleContainer.addView(circleImageView);
+                } else {
                     Toast.makeText(getContext(), "Invalid code. Please try again.", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
@@ -241,8 +227,43 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
+
+
         // TODO: save data to firebase or verify the firebase server accessability
 
+    }
+
+    private static void addMemberToServer(String serverId, String userId) {
+        // Get a reference to the server's members list
+        DatabaseReference serverMembersRef = FirebaseDatabase.getInstance().getReference()
+                .child("servers").child(serverId).child("memberIDs");
+
+        // Add the user ID to the server's members list
+        serverMembersRef.child(userId).setValue(true)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        System.out.println("User added to server: " + serverId);
+                    } else {
+                        System.out.println("Failed to add user to server: " + task.getException().getMessage());
+                    }
+                });
+    }
+
+    private static void addUserToServer(String userId, String serverId) {
+        // Get a reference to the user's servers list
+        DatabaseReference userServersRef = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(userId).child("serverIDs");
+
+        // Add the server ID to the user's servers list
+        userServersRef.child(serverId).setValue(true)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        System.out.println("Server added to user: " + userId);
+                    } else {
+                        System.out.println("Failed to add server to user: " + task.getException().getMessage());
+                    }
+                });
     }
 
     private void handleCircleClick(int index) {
