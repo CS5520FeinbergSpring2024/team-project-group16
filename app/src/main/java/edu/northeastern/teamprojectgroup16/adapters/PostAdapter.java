@@ -75,6 +75,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         ImageButton likeButton;
         ImageButton starButton;
         ImageButton repostButton;
+        TextView likeCount;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,6 +86,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             imageView = itemView.findViewById(R.id.imageView);
             likeButton = itemView.findViewById(R.id.likeButton);
             repostButton = itemView.findViewById(R.id.repostButton);
+            likeCount = itemView.findViewById(R.id.textLikeCount);
         }
     }
 }
