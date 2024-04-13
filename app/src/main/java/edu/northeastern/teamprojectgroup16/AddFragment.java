@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,7 @@ public class AddFragment extends Fragment {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             String serverName = snapshot.getValue(String.class);
+
                                             serverNames.add(serverName);
 
                                             if (serverNames.size() == serverIds.size()) {
@@ -135,7 +137,7 @@ public class AddFragment extends Fragment {
                                                                 @Override
                                                                 public void onSuccess(Uri uri) {
                                                                     // Create a new Post
-                                                                    PostModel post = new PostModel(" ", caption, uri.toString(), userId, selectedfServerId, " ", 0, " ", " ");
+                                                                    PostModel post = new PostModel(" ", caption, uri.toString(), userId, selectedfServerId, " ", 0, " ", null);
 
                                                                     // Create a reference to the new post in Firebase Database
                                                                     DatabaseReference postReference = FirebaseDatabase.getInstance().getReference("posts");
