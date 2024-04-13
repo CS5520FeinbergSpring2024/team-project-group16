@@ -12,7 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,6 +30,8 @@ import edu.northeastern.teamprojectgroup16.model.PostModel;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private List<PostModel> postList;
+    FirebaseFirestore db;
+    DocumentReference userReference;
 
     public PostAdapter(List<PostModel> postList) {
         this.postList = postList;
@@ -35,6 +41,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public PostAdapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_todo, parent, false);
+        db = FirebaseFirestore.getInstance();
+        userReference = db.collection("users").document(FirebaseAuth.getInstance().getUid());
+        PostViewHolder.userReference = userReference;
         return new PostViewHolder(view);
     }
 
@@ -47,6 +56,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostModel postModel = postList.get(position);
+        if (postModel.getLikes() == null) {
+            postModel.setLikes(new ArrayList<>());
+        }
+        holder.post = postModel;
         Log.e("PostAdapter", postModel.toString());
         Log.e("Post Adapter: title", postModel.getTitle());
 //        holder.userName.setText(postModel.getUserName());
@@ -88,6 +101,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         ImageButton repostButton;
         TextView likeCount;
         boolean isLiked = false; // track if it's liked
+        public static DocumentReference userReference;
+        public PostModel post;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,6 +127,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         private void toggleLike() {
             isLiked = !isLiked;
             updateLikeUI();
+            updateLikesData();
         }
 
         private void updateLikeUI() {
@@ -124,10 +140,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
         }
 
-//        private void updateLikeState() {
-//            if (isLiked) {
-//
-//            }
-//        }
+        void updateLikesData() {
+            DocumentReference postReference = FirebaseFirestore.getInstance().collection("posts").document(post.getPostId());
+            if (isLiked) {
+                postReference.update("likes", FieldValue.arrayUnion(userReference));
+                Log.e("PostReference", post.toString());
+                post.addLike(userReference);
+            } else {
+                postReference.update("likes", FieldValue.arrayRemove(userReference));
+                post.removeLike(userReference);
+            }
+            updateLikeUI();
+            update();
+        }
+
+        private void update() {
+            int n = post.getLikes().size();
+            if (n > 0) {
+                likeCount.setVisibility(View.VISIBLE);
+                String str = n + (n > 1 ? " likes" : " like");
+                likeCount.setText(str);
+            } else {
+                likeCount.setVisibility(View.GONE);
+            }
+        }
+
     }
 }

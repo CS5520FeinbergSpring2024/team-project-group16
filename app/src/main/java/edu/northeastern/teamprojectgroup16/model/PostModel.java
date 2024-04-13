@@ -1,6 +1,12 @@
 package edu.northeastern.teamprojectgroup16.model;
 
+import android.util.Log;
+
+import com.google.firebase.firestore.DocumentReference;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PostModel {
     private String postId;
@@ -10,11 +16,51 @@ public class PostModel {
     private String serverId;
     private String text;
     private int likeCount; // the count of likes
+
     private String comment; // comments
     private Date timestamp;
     private String userName;
+    private List<DocumentReference> likes; // users who like this post
 
     public PostModel() {
+    }
+    public PostModel(String postId, String title, String imageUrl, String userId, String serverId, String text, int likeCount, String comment, Date timestamp) {
+        this.postId = postId;
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.userId = userId;
+        this.serverId = serverId;
+        this.text = text;
+        this.likeCount = likeCount;
+        this.comment = comment;
+        this.timestamp = timestamp;
+        this.likes = new ArrayList<>(); // required
+    }
+
+    public void addLike(DocumentReference userReference) {
+        if (likes == null) {
+            likes = new ArrayList<>();
+        }
+        likes.add(userReference);
+    }
+
+    public void removeLike(DocumentReference userReference) {
+        if (likes != null) {
+            likes.remove(userReference);
+        }
+    }
+
+    public List<DocumentReference> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<DocumentReference> likes) {
+        if (likes == null) {
+            Log.e("PostModel", "Attempting to set likes to null");
+            this.likes = new ArrayList<>();
+        } else {
+            this.likes = likes;
+        }
     }
 
     public PostModel(String postId, String title, String imageUrl, String userId, String serverId, String text, int likeCount, String comment, Date timestamp, String userName) {
@@ -30,17 +76,7 @@ public class PostModel {
         this.userName = userName;
     }
 
-    public PostModel(String postId, String title, String imageUrl, String userId, String serverId, String text, int likeCount, String comment, Date timestamp) {
-        this.postId = postId;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.userId = userId;
-        this.serverId = serverId;
-        this.text = text;
-        this.likeCount = likeCount;
-        this.comment = comment;
-        this.timestamp = timestamp;
-    }
+
 
     public String getImageUrl() {
         return imageUrl;
@@ -132,6 +168,7 @@ public class PostModel {
                 ", comment='" + comment + '\'' +
                 ", timestamp=" + timestamp +
                 ", userName='" + userName + '\'' +
+                ", likes=" + likes +
                 '}';
     }
 }
