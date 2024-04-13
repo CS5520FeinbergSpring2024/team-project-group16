@@ -1,4 +1,4 @@
-package edu.northeastern.teamprojectgroup16;
+package edu.northeastern.teamprojectgroup16.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,7 +17,8 @@ import androidx.core.widget.NestedScrollView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import edu.northeastern.teamprojectgroup16.fragments.PostRecFragment;
+import edu.northeastern.teamprojectgroup16.ImageRecFragment;
+import edu.northeastern.teamprojectgroup16.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,8 +29,9 @@ public class HomeFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    // Tags for fragments
+    private static final String TAG_POST_REC_FRAGMENT = "POST_REC_FRAGMENT";
+    private static final String TAG_IMAGE_REC_FRAGMENT = "IMAGE_REC_FRAGMENT";
 
     // TODO: load server data from database using username.
     private int[] circleImages = {R.drawable.ic_add_server}; // Add your circle drawables here
@@ -62,8 +64,8 @@ public class HomeFragment extends Fragment {
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(TAG_POST_REC_FRAGMENT, param1);
+        args.putString(TAG_IMAGE_REC_FRAGMENT, param2);
         fragment.setArguments(args);
         return fragment;
         // TODO: initialize the post data
@@ -71,16 +73,6 @@ public class HomeFragment extends Fragment {
         // TODO: Implement detailed add circle (detailed info needed for add a server)
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
