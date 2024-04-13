@@ -97,16 +97,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         ImageView imageView;
         ImageButton likeButton;
         ImageButton filledHeartButton; // liked post
-        ImageButton starButton;
+        ImageButton saveBtn;
         ImageButton repostButton;
         TextView likeCount;
         boolean isLiked = false; // track if it's liked
+        boolean isSaved = false; // track if it's saved
         public static DocumentReference userReference;
         public PostModel post;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            starButton = itemView.findViewById(R.id.starButton);
+            saveBtn = itemView.findViewById(R.id.starButton);
             profileImage = itemView.findViewById(R.id.profileImage);
             userName = itemView.findViewById(R.id.username);
             textName = itemView.findViewById(R.id.TextName);
@@ -117,7 +118,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             likeCount = itemView.findViewById(R.id.textLikeCount);
             
             setupLikeButton();
+            setupSaveButton();
         }
+
+        private void setupSaveButton() {
+            saveBtn.setOnClickListener(v -> toggleSave());
+        }
+
+        private void toggleSave() {
+            isSaved = !isSaved;
+            updateSavedData();
+        }
+
+
 
         private void setupLikeButton() {
             likeButton.setOnClickListener(v -> toggleLike());
@@ -138,6 +151,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 likeButton.setVisibility(View.VISIBLE);
                 filledHeartButton.setVisibility(View.GONE);
             }
+        }
+        private void updateSavedData() {
+            DocumentReference postReference = FirebaseFirestore.getInstance().collection("posts").document(post.getPostId());
+            if (isSaved) {
+                userReference.update("saved", FieldValue.arrayUnion(postReference));
+//                Log.e("PostReference", post.toString());
+            } else {
+                userReference.update("saved", FieldValue.arrayRemove(postReference));
+            }
+            update();
         }
 
         void updateLikesData() {
@@ -163,6 +186,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             } else {
                 likeCount.setVisibility(View.GONE);
             }
+
+            if (isSaved) saveBtn.setImageResource(R.drawable.ic_save);
+            else saveBtn.setImageResource(R.drawable.ic_save_outlined);
         }
 
     }
