@@ -49,6 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         Glide.with(holder.imageView.getContext())
                 .load(postModel.getImageUrl())
                 .into(holder.imageView);
+        // TODO
     }
 
     @Override
