@@ -73,10 +73,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         TextView userName;
         ImageView imageView;
         ImageButton likeButton;
-        ImageButton filledHeartButton;
+        ImageButton filledHeartButton; // liked post
         ImageButton starButton;
         ImageButton repostButton;
         TextView likeCount;
+        boolean isLiked = false; // track if it's liked
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +90,34 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             filledHeartButton = itemView.findViewById(R.id.likeButton2);
             repostButton = itemView.findViewById(R.id.repostButton);
             likeCount = itemView.findViewById(R.id.textLikeCount);
+            
+            setupLikeButton();
         }
+
+        private void setupLikeButton() {
+            likeButton.setOnClickListener(v -> toggleLike());
+            filledHeartButton.setOnClickListener(v -> toggleLike());
+        }
+
+        private void toggleLike() {
+            isLiked = !isLiked;
+            updateLikeUI();
+        }
+
+        private void updateLikeUI() {
+            if (isLiked) {
+                likeButton.setVisibility(View.GONE);
+                filledHeartButton.setVisibility(View.VISIBLE);
+            } else {
+                likeButton.setVisibility(View.VISIBLE);
+                filledHeartButton.setVisibility(View.GONE);
+            }
+        }
+
+//        private void updateLikeState() {
+//            if (isLiked) {
+//
+//            }
+//        }
     }
 }
