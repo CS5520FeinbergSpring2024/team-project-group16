@@ -77,11 +77,12 @@ public class ImageRecFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_image_rec, container, false);
         imageRecRecyclerView = rootView.findViewById(R.id.imageRecyclerView);
         imageRecRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        imageRecRecyclerView.setHasFixedSize(true);
         List<ImageRec> imageList = new ArrayList<>(); // Create a list of sample images
-        imageAdapter = new ImageRecAdapter(imageList);
+        imageAdapter = new ImageRecAdapter(imageList, getContext());
         imageRecRecyclerView.setAdapter(imageAdapter);
 
-        FirebaseDatabase.getInstance().getReference("Images")
+        FirebaseDatabase.getInstance().getReference("images")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -101,7 +102,7 @@ public class ImageRecFragment extends Fragment {
                     }
                 });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_image_rec, container, false);
+        return rootView;
     }
 
     public void addImageRec(ImageRec imageRec){

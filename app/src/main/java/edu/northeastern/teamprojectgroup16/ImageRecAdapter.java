@@ -19,8 +19,9 @@ public class ImageRecAdapter extends RecyclerView.Adapter<ImageRecAdapter.ImageV
     private List<ImageRec> imageList;
     private Context context;
 
-    public ImageRecAdapter(List<ImageRec> imageList) {
+    public ImageRecAdapter(List<ImageRec> imageList, Context context) {
         this.imageList = imageList;
+        this.context = context;
     }
 
     @NonNull

@@ -53,7 +53,6 @@ public class PostRecFragment extends Fragment {
         postRecyclerView = rootView.findViewById(R.id.postRecyclerView);
         postRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         postRecyclerView.setHasFixedSize(true);
-
         postRecList = new ArrayList<>(); // Create a list of sample posts
         postAdapter = new PostAdapter(postRecList, getContext());
         postRecyclerView.setAdapter(postAdapter);

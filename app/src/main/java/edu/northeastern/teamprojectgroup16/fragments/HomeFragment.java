@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import edu.northeastern.teamprojectgroup16.ImageRecFragment;
 import edu.northeastern.teamprojectgroup16.R;
 
@@ -44,6 +46,7 @@ public class HomeFragment extends Fragment {
 
     // TODO: load server data from database using username.
     private int[] circleImages = {R.drawable.ic_add_server}; // Add your circle drawables here
+    private ArrayList<String> serverIDArray = new ArrayList<>();
     private int selectedCircleIndex = 0;
 
     // TODO: Rename and change types of parameters
@@ -133,10 +136,41 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // TODO: fetch user server
-        // fecthServer();
+         fetchServer(circleContainer);
     
         return rootView;
+    }
+
+    private void fetchServer(LinearLayout circleContainer) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = user.getUid();
+        DatabaseReference serverRef = FirebaseDatabase.getInstance().getReference("users").child(userID).child("serverIDs");
+        serverRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for(DataSnapshot dataSnapshot:snapshot.getChildren()){
+                        serverIDArray.add(dataSnapshot.getKey());
+                        ImageView circleImageView = new ImageView(getContext());
+                        circleImageView.setImageResource(circleImages[0]);
+                        circleImageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO:Should be modified to use serverIDArray rather than index.
+                                handleCircleClick(0);
+                            }
+                        });
+                        circleContainer.addView(circleImageView);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void showImageRecyclerView() {
