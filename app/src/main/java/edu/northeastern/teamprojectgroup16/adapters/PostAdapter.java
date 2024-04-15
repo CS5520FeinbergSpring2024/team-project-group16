@@ -21,19 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.northeastern.teamprojectgroup16.R;
@@ -41,8 +34,7 @@ import edu.northeastern.teamprojectgroup16.model.PostModel;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private List<PostModel> postList;
-    FirebaseFirestore db;
-    DocumentReference userReference;
+    DatabaseReference userReference;
     private static Context context;
 
     public PostAdapter(List<PostModel> postList, Context context) {
@@ -54,8 +46,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public PostAdapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_todo, parent, false);
-        db = FirebaseFirestore.getInstance();
-        userReference = db.collection("users").document(FirebaseAuth.getInstance().getUid());
+        userReference = FirebaseDatabase.getInstance().getReference("users")
+                .child(FirebaseAuth.getInstance().getUid());
         PostViewHolder.userReference = userReference;
         return new PostViewHolder(view);
     }
@@ -69,13 +61,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostModel postModel = postList.get(position);
-        if (postModel.getLikes() == null) {
-            postModel.setLikes(new ArrayList<>());
-        }
+        // TODO: ?
         holder.post = postModel;
+
         Log.e("PostAdapter", postModel.toString());
         Log.e("Post Adapter: title", postModel.getTitle());
 //        holder.userName.setText(postModel.getUserName());
+
         holder.textName.setText(postModel.getTitle());
         Glide.with(holder.imageView.getContext())
                 .load(postModel.getImageUrl())
@@ -85,15 +77,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.checkIfLiked();
         holder.checkIfSaved();
 
-        // like count
-        int count = postModel.getLikeCount();
-        if (count == 0) {
+        int likeCount = (postModel.getLikes() != null) ? postModel.getLikes().size() : 0;
+        if (likeCount == 0) {
             holder.likeCount.setVisibility(View.INVISIBLE);
-        } else if (count == 1) {
-            holder.likeCount.setText(String.format("%d %s", count, "like"));
         } else {
-            holder.likeCount.setText(count + " likes");
+            holder.likeCount.setVisibility(View.VISIBLE);
+            holder.likeCount
+                    .setText(String.format("%d %s", likeCount, likeCount > 1 ? "likes" : "like"));
         }
+
     }
 
     @Override
@@ -118,7 +110,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         TextView likeCount;
         boolean isLiked = false; // track if it's liked
         boolean isSaved = false; // track if it's saved
-        public static DocumentReference userReference;
+        public static DatabaseReference userReference;
         public PostModel post;
         private String userId;
 
@@ -154,11 +146,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
          * Check if it's liked
          */
         private void checkIfLiked() {
-            isLiked = post.getLikes().contains(userReference);
-            update();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null && post.getLikes() != null) {
+                isLiked = post.getLikes().containsKey(user.getUid()); // Check if user's ID is a key in the likes map
+                updateLikeUI();
+                update();
+            }
+
         }
-
-
 
         private void setupLikeButton() {
             likeButton.setOnClickListener(v -> toggleLike());
@@ -167,8 +162,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         private void toggleLike() {
             isLiked = !isLiked;
-            updateLikeUI();
             updateLikesData();
+            updateLikeUI();
+        }
+
+        private void updateLikesData() {
+            DatabaseReference postReference = FirebaseDatabase.getInstance().getReference("posts").child(post.getPostId());
+            if (isLiked) {
+                postReference.child("likes").child(userReference.getKey()).setValue(true)
+                        .addOnSuccessListener(aVoid -> {
+                            post.addLike(userReference.getKey());  // 确保添加点赞者的ID
+                            update();
+                        });
+            } else {
+                postReference.child("likes").child(userReference.getKey()).removeValue()
+                        .addOnSuccessListener(aVoid -> {
+                            post.removeLike(userReference.getKey());  // 确保移除点赞者的ID
+                            update();
+                        });
+            }
         }
 
         private void updateLikeUI() {
@@ -179,6 +191,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 likeButton.setVisibility(View.VISIBLE);
                 filledHeartButton.setVisibility(View.GONE);
             }
+            int count = post.getLikeCount();
+            if (count == 0) {
+                likeCount.setVisibility(View.INVISIBLE);
+            } else if (count == 1) {
+                likeCount.setText(String.format("%d %s", count, "like"));
+            } else {
+                likeCount.setText(count + " likes");
+            }
+        }
+
+
+
+        private void update() {
+            int n = post.getLikes().size();
+            if (n > 0) {
+                likeCount.setVisibility(View.VISIBLE);
+                String str = n + (n > 1 ? " likes" : " like");
+                likeCount.setText(str);
+            } else {
+                likeCount.setVisibility(View.GONE);
+            }
+
+            if (isSaved) saveBtn.setImageResource(R.drawable.ic_save);
+            else saveBtn.setImageResource(R.drawable.ic_save_outlined);
         }
 
         public void checkIfSaved() {
@@ -234,38 +270,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
             update();
         }
-
-        /**
-         * Update the count of likes
-         */
-        void updateLikesData() {
-            DocumentReference postReference = FirebaseFirestore.getInstance().collection("posts").document(post.getPostId());
-            if (isLiked) {
-                postReference.update("likes", FieldValue.arrayUnion(userReference));
-                Log.e("PostReference", post.toString());
-                post.addLike(userReference);
-            } else {
-                postReference.update("likes", FieldValue.arrayRemove(userReference));
-                post.removeLike(userReference);
-            }
-            updateLikeUI();
-            update();
-        }
-
-        private void update() {
-            int n = post.getLikes().size();
-            if (n > 0) {
-                likeCount.setVisibility(View.VISIBLE);
-                String str = n + (n > 1 ? " likes" : " like");
-                likeCount.setText(str);
-            } else {
-                likeCount.setVisibility(View.GONE);
-            }
-
-            if (isSaved) saveBtn.setImageResource(R.drawable.ic_save);
-            else saveBtn.setImageResource(R.drawable.ic_save_outlined);
-        }
-
-
     }
 }

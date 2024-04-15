@@ -21,7 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.northeastern.teamprojectgroup16.R;
 import edu.northeastern.teamprojectgroup16.adapters.PostAdapter;
@@ -53,6 +55,7 @@ public class PostRecFragment extends Fragment {
         postRecyclerView = rootView.findViewById(R.id.postRecyclerView);
         postRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         postRecyclerView.setHasFixedSize(true);
+
         postRecList = new ArrayList<>(); // Create a list of sample posts
         postAdapter = new PostAdapter(postRecList, getContext());
         postRecyclerView.setAdapter(postAdapter);
@@ -70,10 +73,17 @@ public class PostRecFragment extends Fragment {
                 postRecList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     PostModel post = snapshot.getValue(PostModel.class);
+                    if (post != null) {
+                        Map<String, Boolean> likes = new HashMap<>();
+                        for (DataSnapshot child : snapshot.child("likes").getChildren()) {
+                            likes.put(child.getKey(), child.getValue(Boolean.class));
+                        }
+                        post.setLikes(likes);
+                    }
                     postRecList.add(post);
-                    Log.e("Post", String.valueOf(post));
+                    assert post != null;
+                    Log.d("Likes Info", "Post ID: " + post.getPostId() + " Likes: " + post.getLikes().size());
                 }
-
                 postAdapter.notifyDataSetChanged();
             }
 
@@ -102,6 +112,8 @@ public class PostRecFragment extends Fragment {
 //            public void onCancelled(@NonNull DatabaseError error) {
 //
 //            }});
+
+        // Fetch likes
     }
 
     @Override

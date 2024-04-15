@@ -2,11 +2,14 @@ package edu.northeastern.teamprojectgroup16.model;
 
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostModel {
     private String postId;
@@ -20,7 +23,7 @@ public class PostModel {
     private String comment; // comments
     private Date timestamp;
     private String userName;
-    private List<DocumentReference> likes; // users who like this post
+    private Map<String, Boolean> likes; // users who like this post
 
     public PostModel() {
     }
@@ -34,33 +37,28 @@ public class PostModel {
         this.likeCount = likeCount;
         this.comment = comment;
         this.timestamp = timestamp;
-        this.likes = new ArrayList<>(); // required
+        this.likes = new HashMap<>(); // required
     }
 
-    public void addLike(DocumentReference userReference) {
+    public void addLike(String userId) {
         if (likes == null) {
-            likes = new ArrayList<>();
+            likes = new HashMap<>();
         }
-        likes.add(userReference);
+        likes.put(userId, true);
     }
 
-    public void removeLike(DocumentReference userReference) {
+    public void removeLike(String userId) {
         if (likes != null) {
-            likes.remove(userReference);
+            likes.remove(userId);
         }
     }
 
-    public List<DocumentReference> getLikes() {
+    public Map<String, Boolean> getLikes() {
         return likes;
     }
 
-    public void setLikes(List<DocumentReference> likes) {
-        if (likes == null) {
-            Log.e("PostModel", "Attempting to set likes to null");
-            this.likes = new ArrayList<>();
-        } else {
-            this.likes = likes;
-        }
+    public void setLikes(Map<String, Boolean> likes) {
+        this.likes = likes;
     }
 
     public PostModel(String postId, String title, String imageUrl, String userId, String serverId, String text, int likeCount, String comment, Date timestamp, String userName) {

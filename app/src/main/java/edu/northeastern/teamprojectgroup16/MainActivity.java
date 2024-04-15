@@ -102,13 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("InitUserData", "Failed to check if savedPosts exists", databaseError.toException());
             }
         });
-
-//        Map<String, Object> updates = new HashMap<>();
-//        updates.put("savedPosts", new ArrayList<>()); // 初始化 savedPosts 为一个空列表
-//
-//        userRef.updateChildren(updates)
-//                .addOnSuccessListener(aVoid -> Log.d("InitUserData", "User data initialized successfully"))
-//                .addOnFailureListener(e -> Log.e("InitUserData", "Failed to initialize user data", e));
     }
 
 
