@@ -1,6 +1,7 @@
 package edu.northeastern.teamprojectgroup16.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -54,6 +55,7 @@ public class CommentsActivity extends AppCompatActivity {
                 .child("comments").child(postId);
 
         readComments(); // read comments
+        Log.d("Comments get", comments.toString());
 
         boolean openKeyboard = getIntent().getExtras().getBoolean("openKeyboard");
         if (openKeyboard) {

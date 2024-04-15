@@ -48,12 +48,31 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         Comment comment = comments.get(position);
 
         holder.comment.setText(comment.getText()); // set the comment text
-        holder.username.setText(comment.getPublisherId());
+        //holder.username.setText(comment.getPublisherId());
 
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
         String id = comment.getPublisherId(); // publisherID
-        DatabaseReference userRef = usersRef.child(id);
+        DatabaseReference userRef = usersRef.child(id).child("userName");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Get the value from the DataSnapshot
+                String userName = snapshot.getValue(String.class);
 
+                // Set the userName to the post
+                holder.username.setText(userName);
+
+                // Log the username here to ensure it's fetched correctly
+                Log.d("User Name", userName);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle the error
+                Log.e("Database", "Error: ", error.toException());
+            }
+        });
     }
 
     @Override
