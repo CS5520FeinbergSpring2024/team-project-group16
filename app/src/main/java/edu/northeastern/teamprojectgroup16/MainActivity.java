@@ -20,8 +20,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,12 +87,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeUserData(FirebaseUser user) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("savedPosts", new ArrayList<>()); // 初始化 savedPosts 为一个空列表
+        userRef.child("savedPosts").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) { // 只有当savedPosts不存在时才初始化它
+                    userRef.child("savedPosts").setValue(new ArrayList<>())
+                            .addOnSuccessListener(aVoid -> Log.d("InitUserData", "User data initialized successfully"))
+                            .addOnFailureListener(e -> Log.e("InitUserData", "Failed to initialize user data", e));
+                }
+            }
 
-        userRef.updateChildren(updates)
-                .addOnSuccessListener(aVoid -> Log.d("InitUserData", "User data initialized successfully"))
-                .addOnFailureListener(e -> Log.e("InitUserData", "Failed to initialize user data", e));
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("InitUserData", "Failed to check if savedPosts exists", databaseError.toException());
+            }
+        });
+
+//        Map<String, Object> updates = new HashMap<>();
+//        updates.put("savedPosts", new ArrayList<>()); // 初始化 savedPosts 为一个空列表
+//
+//        userRef.updateChildren(updates)
+//                .addOnSuccessListener(aVoid -> Log.d("InitUserData", "User data initialized successfully"))
+//                .addOnFailureListener(e -> Log.e("InitUserData", "Failed to initialize user data", e));
     }
 
 
