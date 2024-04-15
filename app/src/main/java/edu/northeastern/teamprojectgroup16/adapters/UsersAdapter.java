@@ -16,7 +16,7 @@ import java.util.List;
 import edu.northeastern.teamprojectgroup16.ChatActivity;
 import edu.northeastern.teamprojectgroup16.R;
 import edu.northeastern.teamprojectgroup16.UserModel;
-import edu.northeastern.teamprojectgroup16.activities.MessageActivity;
+import edu.northeastern.teamprojectgroup16.fragments.MessageFragment;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder> {
     private Context context;
@@ -54,7 +54,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MessageActivity.class);
+                Intent intent = new Intent(context, MessageFragment.class);
                 intent.putExtra("id", userModel.getUserID());
                 intent.putExtra("name", userModel.getUserName());
                 context.startActivity(intent);

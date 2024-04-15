@@ -32,6 +32,7 @@ import java.util.Map;
 
 import edu.northeastern.teamprojectgroup16.databinding.ActivityMainBinding;
 import edu.northeastern.teamprojectgroup16.fragments.HomeFragment;
+import edu.northeastern.teamprojectgroup16.fragments.MessageFragment;
 import edu.northeastern.teamprojectgroup16.fragments.ProfileFragment;
 import edu.northeastern.teamprojectgroup16.model.ServerModel;
 
