@@ -51,7 +51,7 @@ public class CommentsActivity extends AppCompatActivity {
         String postId = getIntent().getExtras().getString("postId");
         assert postId != null;
         commentsReference = FirebaseDatabase.getInstance().getReference()
-                .child("comments");
+                .child("comments").child(postId);
 
         readComments(); // read comments
 
