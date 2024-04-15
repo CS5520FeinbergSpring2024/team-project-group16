@@ -1,6 +1,7 @@
 package edu.northeastern.teamprojectgroup16.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.northeastern.teamprojectgroup16.R;
+import edu.northeastern.teamprojectgroup16.activities.CommentsActivity;
 import edu.northeastern.teamprojectgroup16.model.PostModel;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
@@ -73,12 +75,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
         //holder.userName.setText(" ");
 
+        // Comment function
+        holder.commentButton.setOnClickListener(view -> {
+            Intent intent = new Intent(context, CommentsActivity.class);
+            intent.putExtra("postId", postModel.getPostId());
+            intent.putExtra("openKeyboard", false);
+            context.startActivity(intent);
+        });
 
         holder.textName.setText(postModel.getTitle());
         Glide.with(holder.imageView.getContext())
                 .load(postModel.getImageUrl())
                 .into(holder.imageView);
-        // TODO
 
         holder.checkIfLiked();
         holder.checkIfSaved();
@@ -110,6 +118,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         TextView userName;
         ImageView imageView;
         ImageButton likeButton;
+        ImageButton commentButton; // comment
         ImageButton filledHeartButton; // liked post
         ImageButton saveBtn;
         ImageButton repostButton;
@@ -132,6 +141,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             repostButton = itemView.findViewById(R.id.repostButton);
             likeCount = itemView.findViewById(R.id.textLikeCount);
             userName = itemView.findViewById(R.id.UserName);
+            commentButton = itemView.findViewById(R.id.commentButton); // comment btn
 
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             userId = firebaseUser.getUid();
