@@ -66,7 +66,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         Log.e("PostAdapter", postModel.toString());
         Log.e("Post Adapter: title", postModel.getTitle());
-//        holder.userName.setText(postModel.getUserName());
+
+        if(postModel.getUserName() != null) {
+            Log.d("Post User Name", postModel.getUserName());
+            holder.userName.setText(postModel.getUserName());
+        }
+        //holder.userName.setText(" ");
+
 
         holder.textName.setText(postModel.getTitle());
         Glide.with(holder.imageView.getContext())
@@ -125,6 +131,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             filledHeartButton = itemView.findViewById(R.id.likeButton2);
             repostButton = itemView.findViewById(R.id.repostButton);
             likeCount = itemView.findViewById(R.id.textLikeCount);
+            userName = itemView.findViewById(R.id.UserName);
 
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             userId = firebaseUser.getUid();

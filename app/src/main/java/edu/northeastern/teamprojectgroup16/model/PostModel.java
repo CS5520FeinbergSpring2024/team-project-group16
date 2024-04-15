@@ -24,7 +24,6 @@ public class PostModel {
     private Date timestamp;
     private String userName;
     private Map<String, Boolean> likes; // users who like this post
-
     public PostModel() {
     }
     public PostModel(String postId, String title, String imageUrl, String userId, String serverId, String text, int likeCount, String comment, Date timestamp) {
@@ -38,6 +37,7 @@ public class PostModel {
         this.comment = comment;
         this.timestamp = timestamp;
         this.likes = new HashMap<>(); // required
+        this.userName = "";
     }
 
     public void addLike(String userId) {
@@ -168,5 +168,13 @@ public class PostModel {
                 ", userName='" + userName + '\'' +
                 ", likes=" + likes +
                 '}';
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

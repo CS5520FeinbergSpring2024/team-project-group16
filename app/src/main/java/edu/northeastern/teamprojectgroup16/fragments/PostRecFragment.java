@@ -66,7 +66,7 @@ public class PostRecFragment extends Fragment {
 
     private void fetchData() {
         DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child("userID");
+
         postsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -83,8 +83,32 @@ public class PostRecFragment extends Fragment {
                     postRecList.add(post);
                     assert post != null;
                     Log.d("Likes Info", "Post ID: " + post.getPostId() + " Likes: " + post.getLikes().size());
+
+                    // Fetch username for the post
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(post.getUserId()).child("userName");
+                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            // Get the value from the DataSnapshot
+                            String userName = snapshot.getValue(String.class);
+
+                            // Set the userName to the post
+                            post.setUserName(userName);
+
+                            // Log the username here to ensure it's fetched correctly
+                            Log.d("User Name", post.getUserName());
+
+                            // Notify the adapter that the data has changed
+                            postAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle the error
+                            Log.e("Database", "Error: ", error.toException());
+                        }
+                    });
                 }
-                postAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -94,27 +118,8 @@ public class PostRecFragment extends Fragment {
                 Toast.makeText(getContext(), "Failed to load posts.", Toast.LENGTH_SHORT).show();
             }
         });
-
-        // TODO: Fetch Username
-//        userRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                    String username = dataSnapshot.child("userName").getValue(String.class);
-//                    for (PostModel model : postRecList){
-//                        model.setUserName(username);
-//                    }
-//                }
-//                postAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }});
-
-        // Fetch likes
     }
+
 
     @Override
     public void onDestroyView() {
