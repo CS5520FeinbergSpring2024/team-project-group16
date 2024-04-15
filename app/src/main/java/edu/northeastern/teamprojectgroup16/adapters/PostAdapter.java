@@ -82,6 +82,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 .into(holder.imageView);
         // TODO
 
+        holder.checkIfLiked();
+        holder.checkIfSaved();
+
         // like count
         int count = postModel.getLikeCount();
         if (count == 0) {
@@ -147,6 +150,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             updateSavedData();
         }
 
+        /**
+         * Check if it's liked
+         */
+        private void checkIfLiked() {
+            isLiked = post.getLikes().contains(userReference);
+            update();
+        }
+
 
 
         private void setupLikeButton() {
@@ -168,6 +179,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 likeButton.setVisibility(View.VISIBLE);
                 filledHeartButton.setVisibility(View.GONE);
             }
+        }
+
+        public void checkIfSaved() {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+            DatabaseReference savedRef = userRef.child("savedPosts");
+            savedRef.orderByValue().equalTo(post.getPostId())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            isSaved = dataSnapshot.exists();
+                            update();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("FirebaseDB Error", "Error checking if post is saved", databaseError.toException());
+                        }
+                    });
+
         }
 
         private void updateSavedData() {
@@ -235,6 +265,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             if (isSaved) saveBtn.setImageResource(R.drawable.ic_save);
             else saveBtn.setImageResource(R.drawable.ic_save_outlined);
         }
+
 
     }
 }
