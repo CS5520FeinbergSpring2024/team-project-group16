@@ -13,10 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.northeastern.teamprojectgroup16.ChatActivity;
 import edu.northeastern.teamprojectgroup16.R;
 import edu.northeastern.teamprojectgroup16.UserModel;
-import edu.northeastern.teamprojectgroup16.fragments.MessageFragment;
+import edu.northeastern.teamprojectgroup16.activities.ChatActivity;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder> {
     private Context context;

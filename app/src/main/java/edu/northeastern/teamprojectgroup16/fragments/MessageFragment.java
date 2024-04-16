@@ -1,6 +1,5 @@
 package edu.northeastern.teamprojectgroup16.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.Nullable;
 
-import edu.northeastern.teamprojectgroup16.ChatActivity;
 import edu.northeastern.teamprojectgroup16.R;
 import edu.northeastern.teamprojectgroup16.UserModel;
 import edu.northeastern.teamprojectgroup16.adapters.UsersAdapter;
@@ -89,7 +87,7 @@ public class MessageFragment extends Fragment {
 //        super.onViewCreated(view, savedInstanceState);
 //
 //        // Launch ChatActivity
-//        Intent intent = new Intent(getActivity(), ChatActivity.class);
+//        Intent intent = new Intent(getActivity(), MessageActivity.class);
 //        startActivity(intent);
 //    }
 
@@ -112,6 +110,8 @@ public class MessageFragment extends Fragment {
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        recyclerView.setHasFixedSize(true);
         usersAdapter = new UsersAdapter(requireContext());
         recyclerView.setAdapter(usersAdapter);
 
@@ -124,9 +124,6 @@ public class MessageFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String uId = dataSnapshot.getKey();
                     UserModel userModel = dataSnapshot.getValue(UserModel.class);
-//                    if (userModel != null && userModel.getUserID() != null && userModel.getUserID().equals(FirebaseAuth.getInstance().getUid())) {
-//                        usersAdapter.add(userModel);
-//                    }
                     if(userModel != null && !userModel.getUserID().equals(FirebaseAuth.getInstance().getUid())) {
                         usersAdapter.add(userModel);
                     }
@@ -141,5 +138,8 @@ public class MessageFragment extends Fragment {
         });
 
         return view;
+
     }
+
+
 }

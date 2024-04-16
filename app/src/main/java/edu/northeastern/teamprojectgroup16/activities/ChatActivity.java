@@ -48,20 +48,9 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        recyclerView = findViewById(R.id.chatrecycler);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        sendBtn = findViewById(R.id.sendMessageIcon);
-        messageAdapter = new MessageAdapter(this);
-
-
-        recyclerView.setAdapter(messageAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        messageText = findViewById(R.id.messageEdit);
-
 
         userReference = FirebaseDatabase.getInstance().getReference("users");
         receiverId = getIntent().getStringExtra("id");
@@ -73,6 +62,15 @@ public class ChatActivity extends AppCompatActivity {
             receiverRoom = receiverId + FirebaseAuth.getInstance().getUid();
 
         }
+
+        sendBtn = findViewById(R.id.sendMessageIcon);
+        messageAdapter = new MessageAdapter(this);
+        recyclerView = findViewById(R.id.chatrecycler);
+        messageText = findViewById(R.id.messageEdit);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(messageAdapter);
+
 
 
         dbReferenceSender = FirebaseDatabase.getInstance().getReference("chats").child(senderRoom);
@@ -149,7 +147,7 @@ public class ChatActivity extends AppCompatActivity {
         messageText.setText("");
 
 
-//
+
 //        String messageId = UUID.randomUUID().toString();
 //        Message messageModel = new Message(messageId, FirebaseAuth.getInstance().getUid(), message);
 //        messageAdapter.add(messageModel);
@@ -177,3 +175,6 @@ public class ChatActivity extends AppCompatActivity {
 
 
 }
+
+
+

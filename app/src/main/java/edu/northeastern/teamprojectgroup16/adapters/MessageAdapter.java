@@ -47,7 +47,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @NonNull
     @Override
     public MessageAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view;
         if (viewType == VIEW_TYPE_SENT) {
@@ -63,12 +62,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MessageAdapter.MyViewHolder holder, int position) {
 
         Message message = messsageList.get(position);
-        if (getItemViewType(position) == VIEW_TYPE_SENT) {
+        if(message.getSenderId().equals(FirebaseAuth.getInstance().getUid())) {
             holder.textViewSentMessage.setText(message.getMessage());
-            holder.textViewReceiveMessage.setVisibility(View.GONE);
         } else {
             holder.textViewReceiveMessage.setText(message.getMessage());
-            holder.textViewSentMessage.setVisibility(View.GONE);
         }
     }
 

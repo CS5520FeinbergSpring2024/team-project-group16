@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/button_gray"
+        android:background="#5AA7A7"
         app:titleTextColor="@color/white"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -22,6 +22,7 @@
         android:layout_above="@id/sendmessageLayout"/>
 
     <RelativeLayout
+
         android:id="@+id/sendmessageLayout"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
