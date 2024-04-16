@@ -174,9 +174,16 @@ public class HomeFragment extends Fragment {
     }
 
     private void showImageRecyclerView() {
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.recyclerViewContainer, imageRecFragment)
-                .commit();
+        if (currentServerID!= null){
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.recyclerViewContainer, ImageRecFragment.newInstance(currentServerID))
+                    .commit();
+        } else{
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.recyclerViewContainer, imageRecFragment)
+                    .commit();
+        }
+
     }
 
     private void showPostRecyclerView() {
