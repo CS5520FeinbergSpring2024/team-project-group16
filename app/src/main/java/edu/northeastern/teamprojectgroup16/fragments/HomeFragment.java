@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment {
     
     private Button showPost;
     private Button showImage;
-
+    private String currentServerID = null;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -157,7 +157,7 @@ public class HomeFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 // TODO:Should be modified to use serverIDArray rather than index.
-                                handleCircleClick(0);
+                                handleCircleClick(dataSnapshot.getKey());
                             }
                         });
                         circleContainer.addView(circleImageView);
@@ -180,9 +180,16 @@ public class HomeFragment extends Fragment {
     }
 
     private void showPostRecyclerView() {
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.recyclerViewContainer, postRecFragment)
-                .commit();
+        if (currentServerID != null){
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.recyclerViewContainer, PostRecFragment.withServerIDPostRecFragment(currentServerID))
+                    .commit();
+        } else {
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.recyclerViewContainer, postRecFragment)
+                    .commit();
+        }
+
     }
 
     private void hideHorizontalScrollBar() {
@@ -231,6 +238,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
+                    String serverIDToUse = null;
                     for (DataSnapshot serverSnapshot : snapshot.getChildren()) {
                         String serverId = serverSnapshot.getKey();
                         String userId = user.getUid();
@@ -239,15 +247,17 @@ public class HomeFragment extends Fragment {
 
                         // Add the server to the user's servers list
                         addUserToServer(userId, serverId);
+                        serverIDToUse = serverId;
 
                     }
                     ImageView circleImageView = new ImageView(getContext());
                     circleImageView.setImageResource(circleImages[index]);
+                    String finalServerIDToUse = serverIDToUse;
                     circleImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // Handle circle click event
-                            handleCircleClick(index);
+                            handleCircleClick(finalServerIDToUse);
                         }
                     });
                     circleContainer.addView(circleImageView);
@@ -300,7 +310,7 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void handleCircleClick(int index) {
-        // TODO: change displayed data.
+    private void handleCircleClick(String serverID) {
+        currentServerID = serverID;
     }
 }
