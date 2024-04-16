@@ -23,4 +23,5 @@
     <color name="background_message">#8E3EFF</color>
     <color name="text_message">#E6FFFFFF</color>
     <color name="text_light_blue">#1D6FEC</color>
+    <color name="green">#5AA7A7</color>
 </resources>
