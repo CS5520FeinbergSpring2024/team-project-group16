@@ -103,7 +103,6 @@ public class ChatActivity extends AppCompatActivity {
                 String message = messageText.getText().toString();
                 if(message.trim().length() > 0) {
                     SendMessage(message);
-                    Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ChatActivity.this, "Message cannot be empty", Toast.LENGTH_SHORT).show();
                 }
