@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView textViewUsername;
     private TextView textViewEmail;
-    Button btnLogOut;
+    ImageView btnLogOut;
     ImageView favoriteButton;
 
     public ProfileFragment() {
