@@ -83,12 +83,6 @@
             android:src="@drawable/ic_save_outlined"
             android:background="@android:color/transparent"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/repostButton"
-            android:layout_margin="8dp"
-            android:background="@drawable/ic_share"/>
 
     </LinearLayout>
 
