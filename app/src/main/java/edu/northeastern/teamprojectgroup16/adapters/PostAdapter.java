@@ -73,7 +73,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             Log.d("Post User Name", postModel.getUserName());
             holder.userName.setText(postModel.getUserName());
         }
-        //holder.userName.setText(" ");
 
         // Comment function
         holder.commentButton.setOnClickListener(view -> {
@@ -87,6 +86,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         Glide.with(holder.imageView.getContext())
                 .load(postModel.getImageUrl())
                 .into(holder.imageView);
+
+        // TODO: show the profile
+        String userId = postModel.getUserId();
+        if (userId != null) {
+            loadImageFromDatabase(userId, holder.profileImage);
+        }
 
         holder.checkIfLiked();
         holder.checkIfSaved();
@@ -110,6 +115,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void setPostList(ArrayList<PostModel> list) {
         this.postList = list;
         notifyDataSetChanged();
+    }
+
+    private void loadImageFromDatabase(String userId, ImageView profileImage) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users")
+                .child(userId).child("imageUrl");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String imageUrl = snapshot.getValue(String.class);
+                if (imageUrl != null) {
+                    Glide.with(context).load(imageUrl).into(profileImage);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("PostAdapter", "Failed to read image URL.", error.toException());
+            }
+        });
     }
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
