@@ -48,10 +48,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         Comment comment = comments.get(position);
 
         holder.comment.setText(comment.getText()); // set the comment text
-        //holder.username.setText(comment.getPublisherId());
+
+        String id = comment.getPublisherId(); // publisherID
+
+        // TODO: show the profile
+        if (id != null) {
+            loadImageFromDatabase(id, holder.profileImage);
+        }
 
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-        String id = comment.getPublisherId(); // publisherID
+
         DatabaseReference userRef = usersRef.child(id).child("userName");
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -78,6 +84,25 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public int getItemCount() {
         return comments.size();
+    }
+
+    private void loadImageFromDatabase(String userId, ImageView profileImage) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users")
+                .child(userId).child("imageUrl");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String imageUrl = snapshot.getValue(String.class);
+                if (imageUrl != null) {
+                    Glide.with(context).load(imageUrl).into(profileImage);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("PostAdapter", "Failed to read image URL.", error.toException());
+            }
+        });
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
