@@ -59,7 +59,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
     }
 
-    @Override
+   @Override
     public void onBindViewHolder(@NonNull MessageAdapter.MyViewHolder holder, int position) {
 
         Message message = messsageList.get(position);
