@@ -124,7 +124,10 @@ public class MessageFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String uId = dataSnapshot.getKey();
                     UserModel userModel = dataSnapshot.getValue(UserModel.class);
-                    if (userModel != null && userModel.getUserID() != null && userModel.getUserID().equals(FirebaseAuth.getInstance().getUid())) {
+//                    if (userModel != null && userModel.getUserID() != null && userModel.getUserID().equals(FirebaseAuth.getInstance().getUid())) {
+//                        usersAdapter.add(userModel);
+//                    }
+                    if(userModel != null && !userModel.getUserID().equals(FirebaseAuth.getInstance().getUid())) {
                         usersAdapter.add(userModel);
                     }
                 }

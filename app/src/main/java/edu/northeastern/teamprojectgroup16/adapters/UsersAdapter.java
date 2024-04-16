@@ -54,7 +54,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MessageFragment.class);
+                Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("id", userModel.getUserID());
                 intent.putExtra("name", userModel.getUserName());
                 context.startActivity(intent);

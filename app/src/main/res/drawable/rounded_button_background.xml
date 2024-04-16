@@ -1,4 +1,4 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#007bff"/> <!-- Change this to the desired color -->
+    <solid android:color="@color/white"/> <!-- Change this to the desired color -->
     <corners android:radius="36dp"/> <!-- Half of the desired diameter for the round button -->
 </shape>
