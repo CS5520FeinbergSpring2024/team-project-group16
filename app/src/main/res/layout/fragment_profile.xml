@@ -32,7 +32,7 @@
                 android:layout_marginTop="15.5dp"
                 android:layout_marginEnd="15.5dp"
                 android:layout_marginBottom="15.5dp"
-                android:background="@drawable/ic_save_outlined"
+                android:background="@drawable/ic_save"
                 android:contentDescription="@string/save" />
 
             <androidx.appcompat.widget.AppCompatImageView
