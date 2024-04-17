@@ -1,6 +1,9 @@
 package edu.northeastern.teamprojectgroup16.fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,9 +19,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,16 +38,23 @@ import com.google.firebase.storage.StorageReference;
 import edu.northeastern.teamprojectgroup16.Login;
 import edu.northeastern.teamprojectgroup16.R;
 import edu.northeastern.teamprojectgroup16.activities.FavoriteActivity;
+import android.location.Geocoder;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class ProfileFragment extends Fragment {
 
     private TextView textViewUsername;
     private TextView textViewEmail;
+    private TextView textViewLocation;
     ImageView btnLogOut;
     ImageView favoriteButton;
     ImageButton editProfileBtn;
     ImageView profileView;
     private String encodedImage;
+    private FusedLocationProviderClient fusedLocationClient;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -52,8 +65,12 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        requestLocationPermission();
+
         textViewUsername = rootView.findViewById(R.id.textViewUsername);
         textViewEmail = rootView.findViewById(R.id.textViewEmail);
+        textViewLocation = rootView.findViewById(R.id.textViewLocation);
         favoriteButton = rootView.findViewById(R.id.relates);
         editProfileBtn = rootView.findViewById(R.id.edit_profileImage);
         profileView = rootView.findViewById(R.id.profileImage);
@@ -180,4 +197,42 @@ public class ProfileFragment extends Fragment {
                     e.printStackTrace();
                 });
     }
+
+    private void requestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission has not been granted, request it.
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
+        } else {
+            // Permission already granted, proceed with location access.
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(requireActivity(), location -> {
+                        if (location != null) {
+                            // Got last known location. In some rare situations, this can be null.
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+                            String cityName = getCityName(latitude, longitude);
+                            // Update email textView with city name
+                            textViewLocation.setText("Location:" + cityName);
+                        } else {
+                            textViewLocation.setText("Location: Unavailable");
+                        }
+                    });
+        }
+    }
+
+    private String getCityName(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+                return address.getLocality();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Unknown";
+    }
+
+
 }
