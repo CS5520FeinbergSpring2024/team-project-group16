@@ -178,22 +178,13 @@ public class HomeFragment extends Fragment {
             getChildFragmentManager().beginTransaction()
                     .replace(R.id.recyclerViewContainer, ImageRecFragment.newInstance(currentServerID))
                     .commit();
-        } else{
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.recyclerViewContainer, imageRecFragment)
-                    .commit();
         }
-
     }
 
     private void showPostRecyclerView() {
         if (currentServerID != null){
             getChildFragmentManager().beginTransaction()
                     .replace(R.id.recyclerViewContainer, PostRecFragment.withServerIDPostRecFragment(currentServerID))
-                    .commit();
-        } else {
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.recyclerViewContainer, postRecFragment)
                     .commit();
         }
 
