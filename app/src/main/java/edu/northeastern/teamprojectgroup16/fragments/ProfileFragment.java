@@ -285,6 +285,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+        fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
     LocationCallback locationCallback = new LocationCallback() {
