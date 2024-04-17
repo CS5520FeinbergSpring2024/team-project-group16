@@ -42,13 +42,13 @@
                 android:textColor="@color/black"
                 android:text="User Email"
                 android:fontFamily="sans-serif"/>
-            <TextView
-                android:id="@+id/location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="User Location"
-                android:fontFamily="sans-serif"/>
+<!--            <TextView-->
+<!--                android:id="@+id/location"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:text="User Location"-->
+<!--                android:fontFamily="sans-serif"/>-->
 
 
         </LinearLayout>

@@ -1,11 +1,14 @@
 package edu.northeastern.teamprojectgroup16.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +26,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Granularity;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -55,6 +69,10 @@ public class ProfileFragment extends Fragment {
     ImageView profileView;
     private String encodedImage;
     private FusedLocationProviderClient fusedLocationClient;
+    private LocationRequest locationRequest;
+    Location mCurrentLocation;
+    String cityName;
+//    private LocationCallback locationCallback;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -66,7 +84,11 @@ public class ProfileFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-        requestLocationPermission();
+        lastLocation();
+
+        setLocationUpdates();
+
+
 
         textViewUsername = rootView.findViewById(R.id.textViewUsername);
         textViewEmail = rootView.findViewById(R.id.textViewEmail);
@@ -198,11 +220,11 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    private void requestLocationPermission() {
+    private void lastLocation() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission has not been granted, request it.
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
-        } else {
+        }else {
             // Permission already granted, proceed with location access.
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(requireActivity(), location -> {
@@ -210,9 +232,10 @@ public class ProfileFragment extends Fragment {
                             // Got last known location. In some rare situations, this can be null.
                             double latitude = location.getLatitude();
                             double longitude = location.getLongitude();
-                            String cityName = getCityName(latitude, longitude);
+                            cityName = getCityName(latitude, longitude);
+                            mCurrentLocation = location;
                             // Update email textView with city name
-                            textViewLocation.setText("Location:" + cityName);
+//                            textViewLocation.setText("Location:" + cityName);
                         } else {
                             textViewLocation.setText("Location: Unavailable");
                         }
@@ -235,4 +258,42 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    private void setLocationUpdates()
+    {
+        LocationRequest locationRequest1 = new LocationRequest.Builder(5000)
+                .setGranularity(Granularity.GRANULARITY_FINE)
+                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                .setMinUpdateDistanceMeters(100)
+                .build();
+        LocationSettingsRequest locationSettingsRequest=  new LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest1)
+            .build();
+        SettingsClient settingsClient = LocationServices.getSettingsClient(requireActivity());
+        settingsClient.checkLocationSettings(locationSettingsRequest).addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+                if(task.isSuccessful()) {
+                    fusedLocationClient.requestLocationUpdates(locationRequest1, locationCallback, Looper.getMainLooper());
+                } else {
+
+                }
+            }
+        });
+//        fusedLocationClient.removeLocationUpdates();
+    }
+    LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(@NonNull LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            Log.d("testLocation", "onLocationResult: " + locationResult);
+            for (Location location : locationResult.getLocations()) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                cityName = getCityName(latitude, longitude);
+                // Update textViewLocation with city name
+                textViewLocation.setText("Location: " + cityName);
+            }
+        }
+    };
 }
