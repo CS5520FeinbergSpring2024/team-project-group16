@@ -69,7 +69,6 @@ public class ProfileFragment extends Fragment {
     ImageView profileView;
     private String encodedImage;
     private FusedLocationProviderClient fusedLocationClient;
-    private LocationRequest locationRequest;
     Location mCurrentLocation;
     String cityName;
 //    private LocationCallback locationCallback;
@@ -87,6 +86,7 @@ public class ProfileFragment extends Fragment {
         lastLocation();
 
         setLocationUpdates();
+        Log.d("setUpdates", "called 0");
 
 
 
@@ -224,6 +224,9 @@ public class ProfileFragment extends Fragment {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission has not been granted, request it.
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
+        } else if(ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission has not been granted, request it.
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
         }else {
             // Permission already granted, proceed with location access.
             fusedLocationClient.getLastLocation()
@@ -235,13 +238,15 @@ public class ProfileFragment extends Fragment {
                             cityName = getCityName(latitude, longitude);
                             mCurrentLocation = location;
                             // Update email textView with city name
-//                            textViewLocation.setText("Location:" + cityName);
+                            textViewLocation.setText("Location:" + cityName);
                         } else {
                             textViewLocation.setText("Location: Unavailable");
                         }
                     });
         }
     }
+
+
 
     private String getCityName(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
@@ -258,41 +263,40 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private void setLocationUpdates()
-    {
-        LocationRequest locationRequest1 = new LocationRequest.Builder(5000)
+    private void setLocationUpdates() {
+        LocationRequest locationRequest = new LocationRequest.Builder(5000)
                 .setGranularity(Granularity.GRANULARITY_FINE)
                 .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                 .setMinUpdateDistanceMeters(100)
                 .build();
-        LocationSettingsRequest locationSettingsRequest=  new LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest1)
-            .build();
+
+        LocationSettingsRequest locationSettingsRequest = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest)
+                .build();
+
         SettingsClient settingsClient = LocationServices.getSettingsClient(requireActivity());
         settingsClient.checkLocationSettings(locationSettingsRequest).addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
             @SuppressLint("MissingPermission")
             @Override
             public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
                 if(task.isSuccessful()) {
-                    fusedLocationClient.requestLocationUpdates(locationRequest1, locationCallback, Looper.getMainLooper());
-                } else {
-
+                    Log.d("Setting", "setting is successul");
+                    fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
                 }
             }
         });
-//        fusedLocationClient.removeLocationUpdates();
     }
+
     LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            Log.d("testLocation", "onLocationResult: " + locationResult);
-            for (Location location : locationResult.getLocations()) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                cityName = getCityName(latitude, longitude);
-                // Update textViewLocation with city name
-                textViewLocation.setText("Location: " + cityName);
+            Log.d("LocationRes", "onLocationRes: " + locationResult);
+            for(Location location : locationResult.getLocations()) {
+                if(location != null) {
+                    cityName = getCityName(location.getLatitude(), location.getLongitude());
+                    textViewLocation.setText("Location: " + cityName);
+                }
             }
         }
     };
