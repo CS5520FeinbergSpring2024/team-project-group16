@@ -15,18 +15,32 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_fragment"
+            android:layout_marginTop="100dp"
+            android:text="New Post"
+            android:textStyle="bold"
+            android:textColor="@color/green"
             android:textSize="26sp"
             android:layout_gravity="center"/>
 
+        <!-- Updated text below the ImageView -->
         <ImageView
             android:id="@+id/imageViewPost"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_launcher_background"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/image"
             android:contentDescription="Preview" />
 
+        <!-- New text view with smaller font size -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap the picture icon and choose your own picture"
+            android:textSize="10sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp" />
+
+        <!-- EditText for caption -->
         <EditText
             android:id="@+id/editTextCaption"
             android:layout_width="match_parent"
@@ -35,6 +49,7 @@
             android:layout_marginTop="10dp"
             android:inputType="textMultiLine" />
 
+        <!-- Button for posting -->
         <Button
             android:id="@+id/buttonPost"
             android:layout_width="wrap_content"
