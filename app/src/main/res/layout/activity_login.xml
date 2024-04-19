@@ -64,6 +64,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Don't have an account? Sign Up"
+        android:textColor="@color/green"
+        android:textStyle="italic"
         android:clickable="true"
         android:onClick="navigateToSignUpActivity"
         app:layout_constraintEnd_toEndOf="parent"
