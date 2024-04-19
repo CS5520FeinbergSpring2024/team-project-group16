@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bcg"
     tools:context=".fragments.ProfileFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
+        android:background="@color/green"
         android:elevation="2.6dp"
         android:layout_alignParentTop="true"
         app:contentInsetStart="0dp"
@@ -32,7 +33,7 @@
                 android:layout_marginTop="15.5dp"
                 android:layout_marginEnd="15.5dp"
                 android:layout_marginBottom="15.5dp"
-                android:background="@drawable/ic_save"
+                android:background="@drawable/save"
                 android:contentDescription="@string/save" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -54,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="@string/username"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:layout_centerVertical="true"
                 android:textStyle="bold"
                 android:textSize="23dp" />
